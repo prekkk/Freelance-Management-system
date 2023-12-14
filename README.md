@@ -1,4 +1,4 @@
 # Freelance-Management-system
 my final year project
 <Br>
-Author: Prekshya Siwakoti
+Author: Prekshya Siwakoti (Herald)
