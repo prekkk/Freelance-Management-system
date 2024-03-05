@@ -10,6 +10,7 @@ class HomeController extends Controller
 {
     // this method shows our home page
     public function index(){
+        // return view('front.home');
 
         $categories = Category::where('status',1)->orderBy('name','ASC')->take(8)->get();
 

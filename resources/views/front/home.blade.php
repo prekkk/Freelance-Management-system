@@ -49,7 +49,7 @@
         <h2>Popular Categories</h2>
         <div class="row pt-5">
 
-            @if ($categories->isNoteEmpty())
+            @if ($categories->isNotEmpty())
         
             @foreach( $categories as $category)
             <div class="col-lg-4 col-xl-3 col-md-6">

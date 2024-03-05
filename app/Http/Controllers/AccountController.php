@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Category;
-use App\Models\CategoryJobType;
+use App\Models\JobType;
 use App\Models\Job;
 
 class AccountController extends Controller
@@ -163,7 +163,7 @@ Session()->flash('success','Profile picture updated successfully.');
     public function createJob(){
 
     $categories = Category::orderBy('name','ASC')->where('status',1)->get();
-    $jobTypes = CategoryJobType::orderBy('name','ASC')->where('status',1)->get();
+    $jobTypes = JobType::orderBy('name','ASC')->where('status',1)->get();
 
         return view('front.account.job.create',[
         'categories' => $categories,
@@ -229,7 +229,7 @@ Session()->flash('success','Profile picture updated successfully.');
     public function editJob(Request $request, $id){
 
     $categories = Category::orderBy('name','ASC')->where('status',1)->get();
-    $jobTypes = CategoryJobType::orderBy('name','ASC')->where('status',1)->get();
+    $jobTypes = JobType::orderBy('name','ASC')->where('status',1)->get();
 
     $user = Auth::user();
 
