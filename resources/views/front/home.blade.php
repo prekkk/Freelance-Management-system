@@ -87,7 +87,7 @@
                                             <span class="fw-bolder"><i class="fa fa-clock-o"></i></span>
                                             <span class="ps-1">{{ $latestJob->jobType->name }}</span>
                                         </p>
-                                        @if (!is_null($featuredJob->salary))
+                                        @if (!is_null($latestJob->salary))
                                         <p class="mb-0">
                                             <span class="fw-bolder"><i class="fa fa-usd"></i></span>
                                             <span class="ps-1">{{ $latestJob->salary }}</span>
@@ -96,7 +96,7 @@
                                     </div>
 
                                     <div class="d-grid mt-3">
-                                        <a href="job-detail.html" class="btn btn-primary btn-lg">Details</a>
+                                        <a href="{{ route('jobDetail',$latestJob->id) }}" class="btn btn-primary btn-lg">Details</a>
                                     </div>
                                 </div>
                             </div>
@@ -113,7 +113,7 @@
 
 <section class="section-3 bg-2 py-5">
     <div class="container">
-        <h2>Latest Jobs</h2>
+        <h2>Featured Jobs</h2>
         <div class="row pt-5">
             <div class="job_listing_area">                    
                 <div class="job_lists">
@@ -143,7 +143,7 @@
                                     </div>
 
                                     <div class="d-grid mt-3">
-                                        <a href="job-detail.html" class="btn btn-primary btn-lg">Details</a>
+                                        <a href="{{ route('jobDetail',$featuredJob->id) }}" class="btn btn-primary btn-lg">Details</a>
                                     </div>
                                 </div>
                             </div>

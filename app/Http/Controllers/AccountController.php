@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Category;
 use App\Models\JobType;
 use App\Models\Job;
+use App\Models\JobApplication;
 
 class AccountController extends Controller
 {
@@ -309,6 +310,37 @@ Session()->flash('success','Profile picture updated successfully.');
             return response()->json([
                 'status' => true
             ]);
+    }
+    public function myJobApplications(){
+        $jobApplications = JobApplication::where('user_id',Auth::user()->id)
+                ->with(['job','job.jobType','job.applications'])
+                ->orderBy('created_at','DESC')
+                ->paginate(10);
+
+        return view('front.account.job.my-job-applications',[
+            'jobApplications' => $jobApplications
+        ]);
+    }
+    public function removeJobs(Request $request){
+        $jobApplication = JobApplication::where([
+                                    'id' => $request->id, 
+                                    'user_id' => Auth::user()->id]
+                                )->first();
+        
+        if ($jobApplication == null) {
+            session()->flash('error','Job application not found');
+            return response()->json([
+                'status' => false,                
+            ]);
+        }
+
+        JobApplication::find($request->id)->delete();
+        session()->flash('success','Job application removed successfully.');
+
+        return response()->json([
+            'status' => true,                
+        ]);
+
     }
 }
  
