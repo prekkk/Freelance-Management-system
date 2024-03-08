@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Job;
+use App\Models\SavedJob;
 use App\Models\JobApplication;
 use App\Models\JobType;
 use Illuminate\Http\Request;
@@ -84,7 +85,24 @@ class JobsController extends Controller
 
     }
 
-        return view('front.jobDetail',['job' => $job]);
+    $count = 0;
+    if (Auth::user()) {
+            $count = SavedJob::where([
+                'user_id' => Auth::user()->id,
+                'job_id' => $id
+            ])->count();
+        }
+        
+
+        // fetch applicants
+
+        $applications = JobApplication::where('job_id',$id)->with('user')->get();
+
+
+        return view('front.jobDetail',[ 'job' => $job,
+                                        'count' => $count,
+                                        'applications' => $applications
+                                    ]);
     }
     public function applyJob(Request $request) {
         $id = $request->id;
@@ -113,7 +131,7 @@ class JobsController extends Controller
             ]);
         }
 
-        // You can not apply on a job twice
+        // You can not apply on a job twise
         $jobApplicationCount = JobApplication::where([
             'user_id' => Auth::user()->id,
             'job_id' => $id
@@ -127,6 +145,7 @@ class JobsController extends Controller
                 'message' => $message
             ]);
         }
+
         $application = new JobApplication();
         $application->job_id = $id;
         $application->user_id = Auth::user()->id;
@@ -134,34 +153,68 @@ class JobsController extends Controller
         $application->applied_date = now();
         $application->save();
 
-        // $message = 'You have successfully applied.';
 
-        // session()->flash('success',$message);
-        // return response()->json([
-        //     'status' => true,
-        //     'message' => $message
-        // ]);
-
-         // Send Notification Email to Employer
-         $employer = User::where('id',$employer_id)->first();
+        // Send Notification Email to Employer
+        $employer = User::where('id',$employer_id)->first();
         
-         $mailData = [
-             'employer' => $employer,
-             'user' => Auth::user(),
-             'job' => $job,
-         ];
- 
-         Mail::to($employer->email)->send(new JobNotificationEmail($mailData));
- 
-         $message = 'You have successfully applied.';
- 
-         session()->flash('success',$message);
- 
-         return response()->json([
-             'status' => true,
-             'message' => $message
-         ]);
-     }
+        $mailData = [
+            'employer' => $employer,
+            'user' => Auth::user(),
+            'job' => $job,
+        ];
+
+        Mail::to($employer->email)->send(new JobNotificationEmail($mailData));
+
+        $message = 'You have successfully applied.';
+
+        session()->flash('success',$message);
+
+        return response()->json([
+            'status' => true,
+            'message' => $message
+        ]);
+    }
+
+    public function saveJob(Request $request) {
+
+        $id = $request->id;
+
+        $job = Job::find($id);
+
+        if ($job == null) {
+            session()->flash('error','Job not found');
+
+            return response()->json([
+                'status' => false,
+            ]);
+        }
+
+        // Check if user already saved the job
+        $count = SavedJob::where([
+            'user_id' => Auth::user()->id,
+            'job_id' => $id
+        ])->count();
+
+        if ($count > 0) {
+            session()->flash('error','You have already saved this job.');
+
+            return response()->json([
+                'status' => false,
+            ]);
+        }
+
+        $savedJob = new SavedJob;
+        $savedJob->job_id = $id;
+        $savedJob->user_id = Auth::user()->id;
+        $savedJob->save();
+
+        session()->flash('success','You have successfully saved the job.');
+
+        return response()->json([
+            'status' => true,
+        ]);
+
+    }
  
 }
 

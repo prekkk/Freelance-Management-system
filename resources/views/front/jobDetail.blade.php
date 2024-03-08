@@ -91,8 +91,6 @@
                 @if (Auth::user())
                    @if (Auth::user()->id == $job->user_id)
                        
-                   
-                
                 <div class="card shadow border-0 mt-4">
                     <div class="job_details_header">
                         <div class="single_jobs white-bg d-flex justify-content-between">
@@ -140,7 +138,7 @@
                 <div class="card shadow border-0">
                     <div class="job_sumary">
                         <div class="summery_header pb-1 pt-4">
-                            <h3>Job Summery</h3>
+                            <h3>Job Summary</h3>
                         </div>
                         <div class="job_content pt-3">
                             <ul>
@@ -158,7 +156,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card shadow border-0 my-4">
+                {{-- <div class="card shadow border-0 my-4">
                     <div class="job_sumary">
                         <div class="summery_header pb-1 pt-4">
                             <h3>Company Details</h3>
@@ -177,8 +175,8 @@
 
                             </ul>
                         </div>
-                    </div>
-                </div>
+                    </div> 
+                </div> --}}
             </div>
         </div>
     </div>
