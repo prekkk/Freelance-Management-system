@@ -205,6 +205,6 @@ $("#changePasswordForm").submit(function(e){
 
         }
     });
-});
+}); 
 </script>
 @endsection
