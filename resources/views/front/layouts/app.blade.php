@@ -121,6 +121,6 @@
 		
 	});
 	</script>
-@yeild('customJs')
+
 </body>
 </html>

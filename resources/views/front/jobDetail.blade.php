@@ -21,7 +21,8 @@
                     <div class="job_details_header">
                         <div class="single_jobs white-bg d-flex justify-content-between">
                             <div class="jobs_left d-flex align-items-center">
-                                
+
+                                 <img src="{{ asset($job->image_path) }}" alt="Job Image" class="img-fluid mb-3">
                                 <div class="jobs_conetent">
                                     <a href="#">
                                         <h4>{{ $job->title }}</h4>

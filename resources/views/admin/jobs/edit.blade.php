@@ -141,8 +141,8 @@
                                     <option value="10_plus" {{ ($job->experience == '10_plus') ? 'selected' : '' }}>10+ Years</option>
                                 </select>
                                 <p></p>
-                            </div>
-                             --}}
+                            </div> --}}
+                            
                             
 
                             <div class="mb-4">
@@ -168,8 +168,8 @@
                             <div class="mb-4">
                                 <label for="" class="mb-2">Website</label>
                                 <input type="text" value="{{ $job->company_website }}" placeholder="Website" id="website" name="website" class="form-control">
-                            </div>
-                        </div>  --}}
+                            </div> 
+                        </div> --}}
                         <div class="card-footer  p-4">
                             <button type="submit" class="btn btn-primary">Update Job</button>
                         </div>               
