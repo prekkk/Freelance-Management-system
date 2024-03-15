@@ -135,7 +135,7 @@
         </div>
     </div>
 </section>
-@endsection
+a
 
 @section('customJs')
 <script type="text/javascript">

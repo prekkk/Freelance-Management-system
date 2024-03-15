@@ -2,91 +2,92 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\JobNotificationEmail;
 use App\Models\Category;
 use App\Models\Job;
-use App\Models\SavedJob;
 use App\Models\JobApplication;
 use App\Models\JobType;
+use App\Models\SavedJob;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\JobNotificationEmail;
-use App\Models\User;
 
 class JobsController extends Controller
 {
-    //this method will show jobs page
-    public function index(Request $request){
+    // This method will show jobs page
+    public function index(Request $request) {
+        $categories = Category::where('status',1)->get();
+        $jobTypes = JobType::where('status',1)->get();
 
-       $categories = Category::where('status',1)->get();
-       $JobTypes = JobType::where('status',1)->get();
+        $jobs = Job::where('status',1);
 
-       $jobs = Job::where('status',1);
+        // Search using keyword
+        if (!empty($request->keyword)) {
+            $jobs = $jobs->where(function($query) use ($request) {
+                $query->orWhere('title','like','%'.$request->keyword.'%');
+                $query->orWhere('keywords','like','%'.$request->keyword.'%');
+            });
+        }
 
-       //Search using keyword
-       if(!empty($request->keyword)){
-        $jobs = $jobs->where(function($query) use ($request){
-            $query->orWhere('title','like','%'.$request->keyword.'%');
-            $query->orWhere('keywords','like','%'.$request->keyword.'%');
+        // Search using location
+        if(!empty($request->location)) {
+            $jobs = $jobs->where('location',$request->location);
+        }
 
-        });
-       }
+        // Search using category
+        if(!empty($request->category)) {
+            $jobs = $jobs->where('category_id',$request->category);
+        }
 
-       // Search using location
-       if(!empty($request->location)){
-        $jobs = $jobs->where('location', $request->location);
+        $jobTypeArray = [];
+        // Search using Job Type
+        if(!empty($request->jobType)) {
+            $jobTypeArray = explode(',',$request->jobType);
 
-       }
+            $jobs = $jobs->whereIn('job_type_id',$jobTypeArray);
+        }
 
-       // Search using category
-       if(!empty($request->category)){
-        $jobs = $jobs->where('category_id', $request->category);
+        // Search using experience
+        if(!empty($request->experience)) {
+            $jobs = $jobs->where('experience',$request->experience);
+        }
 
-       }
-       $jobTypeArray = [];
-       // Search using Job Type
-       if(!empty($request->jobType)){
 
-        //1,2,3
-        $jobTypeArray  = explode(',',$request->jobType);
-        $jobs = $jobs->whereIn('job_type_id', $jobTypeArray);
+        $jobs = $jobs->with(['jobType','category']);
 
-       }
+        if($request->sort == '0') {
+            $jobs = $jobs->orderBy('created_at','ASC');
+        } else {
+            $jobs = $jobs->orderBy('created_at','DESC');
+        }
+        
 
-       $jobs = $jobs->with(['jobType','category']);
-       
-       if($request->sort == '0'){
-        $jobs = $jobs->orderBy('created_at','ASC');
-       }
-       else{
-        $jobs = $jobs->orderBy('created_at','DESC');
-       }
-       
+        $jobs = $jobs->paginate(9);
 
-       $jobs = $jobs->paginate(9);
 
         return view('front.jobs',[
-        'categories' => $categories,
-        'JobTypes' => $JobTypes,
-        'jobs' => $jobs,
-        'jobTypeArray' => $jobTypeArray ?? []
+            'categories' => $categories,
+            'jobTypes' => $jobTypes,
+            'jobs' => $jobs,
+            'jobTypeArray' => $jobTypeArray
         ]);
     }
 
-    // shows job detail page
-    public function detail($id){
-        $job= Job::where([
-        'id'=> $id, 
-        'status' => 1
-    ])->with(['jobType','category'])->first();
+    // This method will show job detail page
+    public function detail($id) {
 
-    if($job == null){
-        abort(404);
+        $job = Job::where([
+                            'id' => $id, 
+                            'status' => 1
+                        ])->with(['jobType','category'])->first();
+        
+        if ($job == null) {
+            abort(404);
+        }
 
-    }
-
-    $count = 0;
-    if (Auth::user()) {
+        $count = 0;
+        if (Auth::user()) {
             $count = SavedJob::where([
                 'user_id' => Auth::user()->id,
                 'job_id' => $id
@@ -104,6 +105,7 @@ class JobsController extends Controller
                                         'applications' => $applications
                                     ]);
     }
+
     public function applyJob(Request $request) {
         $id = $request->id;
 
@@ -196,7 +198,7 @@ class JobsController extends Controller
         ])->count();
 
         if ($count > 0) {
-            session()->flash('error','You have already saved this job.');
+            session()->flash('error','You already saved this job.');
 
             return response()->json([
                 'status' => false,
@@ -215,6 +217,4 @@ class JobsController extends Controller
         ]);
 
     }
- 
 }
-

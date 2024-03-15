@@ -31,7 +31,7 @@
                                             <p> <i class="fa fa-map-marker"></i> {{ $job->location }}</p>
                                         </div>
                                         <div class="location">
-                                            <p> <i class="fa fa-clock-o"></i> {{ $job->jobType->name }}</p>
+                                            <p> <i class="fa fa-clock-o"></i> {{ optional($job->jobType)->name ?: 'N/A' }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -151,7 +151,7 @@
                                 @endif
 
                                 <li>Location: <span>{{ $job->location }}</span></li>
-                                <li>Job Nature: <span> {{ $job->jobType->name }}</span></li>
+                                <li>Job Nature: <span> {{ optional($job->jobType)->name ?: 'N/A' }}</span></li>
                             </ul>
                         </div>
                     </div>

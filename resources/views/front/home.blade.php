@@ -136,10 +136,10 @@
                                                 <span class="fw-bolder"><i class="fa fa-map-marker"></i></span>
                                                 <span class="ps-1">{{ $latestJob->location }}</span>
                                             </p>
-                                            <p class="mb-0">
+                                            {{-- <p class="mb-0">
                                                 <span class="fw-bolder"><i class="fa fa-clock-o"></i></span>
                                                 <span class="ps-1">{{ $latestJob->jobType->name }}</span>
-                                            </p>
+                                            </p> --}}
                                             @if (!is_null($latestJob->salary))
                                             <p class="mb-0">
                                                 <span class="fw-bolder"><i class="fa fa-usd"></i></span>
