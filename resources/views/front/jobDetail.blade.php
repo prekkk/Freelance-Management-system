@@ -194,6 +194,7 @@ function applyJob(id){
             type: 'post',
             data: {id:id},
             dataType: 'json',
+            _token: csrfToken,
             success: function(response) {
                 window.location.href = "{{ url()->current() }}";
             } 
@@ -207,6 +208,7 @@ function saveJob(id){
         type: 'post',
         data: {id:id},
         dataType: 'json',
+        _token: csrfToken,
         success: function(response) {
             window.location.href = "{{ url()->current() }}";
         } 

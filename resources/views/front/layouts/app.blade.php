@@ -29,6 +29,9 @@
 					</li>	
 					<li class="nav-item">
 						<a class="nav-link" aria-current="page" href="{{ route("jobs") }}">Find Jobs</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" aria-current="page" href="{{ route("freelancers") }}">Find Freelancers</a>
 					</li>										
 				</ul>	
 				

@@ -48,6 +48,7 @@ class DatabaseSeeder extends Seeder
         //\App\Models\Category::factory(8)->create();
 
         // Insert data into the jobs table
-        \App\Models\Job::factory(10)->create();
+        //\App\Models\Job::factory(10)->create();
+
     }
 }
