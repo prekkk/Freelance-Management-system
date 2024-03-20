@@ -60,8 +60,10 @@
                                             <img src="{{ $freelancer->image_url }}" alt="{{ $freelancer->name }}" class="img-fluid">
                                             {{-- You can add more freelancer details as needed --}}
                                             <div class="d-grid mt-3">
-                                                {{-- Add button or link to view freelancer details --}}
-                                                <a href="#" class="btn btn-primary btn-lg">View Details</a>
+                                                {{-- Add button or link to view freelancer details
+                                                <a href="#" class="btn btn-primary btn-lg">View Details</a> --}}
+                                                {{-- Add button to add feedback --}}
+                                                <a href="{{ route('feedback.create', ['freelancer_id' => $freelancer->id]) }}" class="btn btn-primary">Add Feedback</a>
                                             </div>
                                         </div>
                                     </div>
@@ -84,52 +86,35 @@
     $("#searchForm").submit(function(e){
         e.preventDefault();
 
-        var url = '{{ route("jobs") }}?';
+        var url = '{{ route("freelancers") }}';
 
-        var keyword = $("#keyword").val();
         var location = $("#location").val();
-        var category = $("#category").val();
-        var experience = $("#experience").val();
+        var designation = $("#designation").val();
         var sort = $("#sort").val();
 
-        var checkedJobTypes = $("input:checkbox[name='job_type']:checked").map(function(){
-            return $(this).val();
-        }).get();
-
-        // If keyword has a value
-        if (keyword != "") {
-            url += '&keyword='+keyword;
+        // Function to get the checked values of checkboxes for filtering
+        function getCheckedFilters(checkboxName) {
+            var checkedValues = [];
+            $("input:checkbox[name='" + checkboxName + "']:checked").each(function() {
+                checkedValues.push($(this).val());
+            });
+            return checkedValues;
         }
 
-        // If location has a value
-        if (location != "") {
-            url += '&location='+location;
-        }
+        // Add filters to URL parameters
+        url += '?' + $.param({
+            location: location,
+            designation: designation,
+            sort: sort,
+            // If you have checkboxes for filtering, add them here
+            // job_type: getCheckedFilters('job_type')
+        });
 
-        // If category has a value
-        if (category != "") {
-            url += '&category='+category;
-        }
-
-        // If experience has a value
-        if (experience != "") {
-            url += '&experience='+experience;
-        }
-
-        // If user has checked job types
-        if (checkedJobTypes.length > 0) {
-            url += '&jobType='+checkedJobTypes;
-        }
-
-        url += '&sort='+sort;
-
-        window.location.href=url;
-        
+        window.location.href = url;
     });
 
     $("#sort").change(function(){
         $("#searchForm").submit();
     });
-
 </script>
 @endsection
