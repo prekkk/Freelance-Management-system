@@ -56,15 +56,22 @@
                                             <p>{{ $freelancer->designation }}</p>
                                             <p>{{ $freelancer->email }}</p>
                                             <p>{{ $freelancer->location }}</p>
-                                            {{-- Display image --}}
-                                            <img src="{{ $freelancer->image_url }}" alt="{{ $freelancer->name }}" class="img-fluid">
+                                            {{-- Display image
+                                            <img src="{{ $freelancer->image_url }}" alt="{{ $freelancer->name }}" class="img-fluid"> --}}
                                             {{-- You can add more freelancer details as needed --}}
                                             <div class="d-grid mt-3">
-                                                {{-- Add button or link to view freelancer details
-                                                <a href="#" class="btn btn-primary btn-lg">View Details</a> --}}
-                                                {{-- Add button to add feedback --}}
-                                                <a href="{{ route('feedback.create', ['freelancer_id' => $freelancer->id]) }}" class="btn btn-primary">Add Feedback</a>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        {{-- Add button to view freelancer details --}}
+                                                        <a href="{{ route('freelancer.show', ['id' => $freelancer->id]) }}" class="btn btn-primary">View Details</a>
+                                                    </div>
+                                                    <div class="col">
+                                                        {{-- Add button to add feedback --}}
+                                                        <a href="{{ route('feedback.create', ['freelancer_id' => $freelancer->id]) }}" class="btn btn-primary">Add Feedback</a>
+                                                    </div>
+                                                </div>
                                             </div>
+                                            
                                         </div>
                                     </div>
                                 </div>

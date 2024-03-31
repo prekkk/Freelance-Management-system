@@ -33,21 +33,21 @@ class FreelancersController extends Controller
 
 
 
-    // This method will show freelancer detail page
-    // public function detail($id)
-    // {
-    //     $freelancer = Freelancer::where([
-    //         'id' => $id,
-    //         'status' => 1
-    //     ])->first();
+   // This method will show freelancer detail page
+   public function detail($id)
+   {
+       $freelancer = Freelancer::where([
+           'id' => $id,
+           'status' => 1
+       ])->first();
 
-    //     if ($freelancer == null) {
-    //         abort(404);
-    //     }
+       if ($freelancer == null) {
+           abort(404);
+       }
 
-        // You can fetch additional data related to the freelancer here
+       // You can fetch additional data related to the freelancer here
 
-        // return view('front.freelancerDetail', ['freelancer' => $freelancer]);
-    //}
+       return view('front.freelancerDetail', ['freelancer' => $freelancer]);
+   }
 }
 

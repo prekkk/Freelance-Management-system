@@ -28,6 +28,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/',[HomeController::class,'index'])->name('home');
 Route::get('/jobs',[JobsController::class,'index'])->name('jobs');
 Route::get('/freelancers',[FreelancersController::class,'index'])->name('freelancers');
+Route::get('/freelancer/detail/{id}', [FreelancersController::class,'detail'])->name('freelancer.show');
+Route::post('/freelancer/save', [FreelancersController::class, 'save'])->name('saveFreelancer');
 Route::get('/jobs/detail/{id}',[JobsController::class,'detail'])->name('jobDetail');
 Route::get('/feedback/create/{freelancer_id}', [FeedbackController::class, 'create'])->name('feedback.create');
 Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.store');

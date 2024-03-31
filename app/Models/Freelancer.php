@@ -7,5 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Freelancer extends Model
 {
-    use HasFactory;
+    /**
+     * Get the feedbacks associated with the freelancer.
+     */
+    public function feedback()
+    {
+        return $this->hasMany(Feedback::class);
+    }
 }
+

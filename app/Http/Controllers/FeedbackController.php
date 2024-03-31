@@ -47,6 +47,7 @@ class FeedbackController extends Controller
         // to display to the user
 
         // Redirect the user back to the feedback form with a success message
-        return redirect()->route('feedback.create')->with('success', 'Thank you for your feedback!');
+        return redirect()->route('feedback.create', ['freelancer_id' => $request->freelancer_id])->with('success', 'Thank you for your feedback!');
+    
     }
 }
