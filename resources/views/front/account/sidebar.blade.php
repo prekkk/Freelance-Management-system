@@ -33,6 +33,9 @@
                <a href="{{ route('account.savedJobs') }}">Saved Jobs</a> 
             </li>      
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                <a href="{{ route('account.saveFreelancer') }}">Saved Freelancers</a> 
+             </li>      
+            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                 <a href="{{ route('account.logout')}}">Logout</a> 
             </li>                                                  
         </ul>

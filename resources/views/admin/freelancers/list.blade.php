@@ -92,7 +92,7 @@
             data: { id: id},
             dataType:'json',
             success:function(response){
-                window.location.href = "{{ route('admin.freelancers') }}";
+                window.location.href = "{{ route('admin.freelancers.freelancerlist') }}";
 
             }
         });

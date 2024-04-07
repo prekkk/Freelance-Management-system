@@ -11,7 +11,7 @@
                 <a href="{{ route('admin.jobApplications') }}">Job Applications</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <a href="{{ route('admin.freelancers.index') }}">Freelancers</a>
+                <a href="{{ route('admin.freelancers.freelancerlist') }}">Freelancers</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                 <a href="{{ route('account.logout') }}">Logout</a>

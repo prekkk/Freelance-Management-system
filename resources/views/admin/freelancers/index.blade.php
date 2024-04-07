@@ -90,7 +90,7 @@
                 type: 'delete',
                 dataType: 'json',
                 success: function(response) {
-                    window.location.href = "{{ route('admin.freelancers.index') }}"; // Redirect to freelancers index
+                    window.location.href = "{{ route('admin.freelancers.freelancerlist') }}"; // Redirect to freelancers index
                 }
             });
         }

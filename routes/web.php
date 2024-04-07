@@ -9,6 +9,7 @@ use App\Http\Controllers\admin\JobController;
 use App\Http\Controllers\admin\JobApplicationController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\DashboardController;
+use App\Http\Controllers\KhaltiPaymentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,6 +36,8 @@ Route::get('/feedback/create/{freelancer_id}', [FeedbackController::class, 'crea
 Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.store');
 Route::post('/apply-job',[JobsController::class,'applyJob'])->name('applyJob');
 Route::post('/save-job',[JobsController::class,'saveJob'])->name('saveJob');
+// Route for Khalti payment verification
+Route::post('/ajax/khalti/verify_job', [KhaltiPaymentController::class, 'verifyJob'])->name('ajax.khalti.verify_job');
 
 Route::group(['prefix' => 'admin','middleware' => 'checkRole'], function(){
     Route::get('/dashboard',[DashboardController::class,'index'])->name('admin.dashboard');
@@ -48,7 +51,7 @@ Route::group(['prefix' => 'admin','middleware' => 'checkRole'], function(){
     Route::delete('/jobs',[JobController::class,'destroy'])->name('admin.jobs.destroy');
     Route::get('/job-applications',[JobApplicationController::class,'index'])->name('admin.jobApplications');
     Route::delete('/job-applications',[JobApplicationController::class,'destroy'])->name('admin.jobApplications.destroy');
-    Route::get('/freelancers', [FreelancersController::class, 'index'])->name('admin.freelancers.index');
+    Route::get('/admin/freelancers', [FreelancersController::class, 'freelancerlist'])->name('admin.freelancers.freelancerlist');
     Route::get('/freelancers/{id}/edit', [FreelancersController::class, 'edit'])->name('admin.freelancers.edit');
     Route::put('/freelancers/{id}', [FreelancersController::class, 'update'])->name('admin.freelancers.update');
     Route::delete('/freelancers/{id}', [FreelancersController::class, 'destroy'])->name('admin.freelancers.destroy');
@@ -83,6 +86,8 @@ Route::group(['middleware' => 'guest'],function(){
         Route::get('/saved-jobs',[AccountController::class,'savedJobs'])->name('account.savedJobs'); 
         Route::post('/remove-saved-job',[AccountController::class,'removeSavedJob'])->name('account.removeSavedJob');   
         Route::post('/update-password',[AccountController::class,'updatePassword'])->name('account.updatePassword');  
+        Route::post('/save-freelancer',[AccountController::class,'saveFreelancer'])->name('account.saveFreelancer');
+
     });
 
 });

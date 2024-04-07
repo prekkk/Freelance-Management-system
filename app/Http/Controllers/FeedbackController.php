@@ -14,12 +14,12 @@ class FeedbackController extends Controller
      * @return \Illuminate\View\View
      */
     public function create($freelancer_id)
-{
-    // Get the freelancer based on the ID
-    $freelancer = Freelancer::findOrFail($freelancer_id);
+    {
+        // Get the freelancer based on the ID
+        $freelancer = Freelancer::findOrFail($freelancer_id);
 
-    return view('front.feedback', ['freelancer' => $freelancer]);
-}
+        return view('front.feedback', ['freelancer' => $freelancer]);
+    }
 
     /**
      * Store the feedback data.
@@ -28,26 +28,20 @@ class FeedbackController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
-    {
-        // Validate the request data
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'message' => 'required|string|max:1000',
-        ]);
+{
+    // Validate the request data
+    $request->validate([
+        'message' => 'required|string|max:1000',
+        'freelancer_id' => 'required|exists:freelancers,id', // Ensure the freelancer_id is provided and exists in the freelancers table
+    ]);
 
-        // Create a new Feedback instance
-        $feedback = new Feedback();
-        $feedback->name = $request->name;
-        $feedback->email = $request->email;
-        $feedback->message = $request->message;
-        $feedback->save();
+    // Create a new Feedback instance
+    $feedback = new Feedback();
+    $feedback->message = $request->message;
+    $feedback->freelancer_id = $request->freelancer_id; // Assign the freelancer_id
+    $feedback->save();
 
-        // Optionally, you can add a success message here
-        // to display to the user
-
-        // Redirect the user back to the feedback form with a success message
-        return redirect()->route('feedback.create', ['freelancer_id' => $request->freelancer_id])->with('success', 'Thank you for your feedback!');
-    
-    }
+    // Redirect the user back to the feedback form with a success message
+    return redirect()->route('feedback.create', ['freelancer_id' => $request->freelancer_id])->with('success', 'Thank you for your feedback!');
+}
 }

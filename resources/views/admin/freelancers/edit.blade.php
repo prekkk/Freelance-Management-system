@@ -8,7 +8,7 @@
                 <nav aria-label="breadcrumb" class=" rounded-3 p-3 mb-4">
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item"><a href="{{ route("admin.dashboard") }}">Home</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route("admin.freelancers.index") }}">Freelancers</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route("admin.freelancers.freelancerlist") }}">Freelancers</a></li>
                         <li class="breadcrumb-item active">Edit</li>
                     </ol>
                 </nav>
@@ -82,7 +82,7 @@ $("#freelancerForm").submit(function(e){
                     .removeClass('invalid-feedback')
                     .html('')
 
-                window.location.href="{{ route('admin.freelancers.index') }}";
+                window.location.href="{{ route('admin.freelancers.freelancerlist') }}";
 
             } else {
                 var errors = response.errors;

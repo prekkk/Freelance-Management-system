@@ -11,19 +11,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('feedback', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('freelancer_id')->constrained()->onDelete('cascade');
-            $table->text('message');
-            $table->timestamps();
+        Schema::table('feedback', function (Blueprint $table) {
+            $table->dropColumn(['name', 'email']);
         });
     }
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
     public function down()
     {
-        Schema::dropIfExists('feedback');
+        // If you ever need to rollback, you can re-add the columns here
     }
 };
