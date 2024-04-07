@@ -7,6 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Freelancer extends Model
 {
+    use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'designation',
+        'location',
+        '_token', // Add _token to the fillable array
+    ];
+
     /**
      * Get the feedbacks associated with the freelancer.
      */
@@ -15,4 +24,3 @@ class Freelancer extends Model
         return $this->hasMany(Feedback::class);
     }
 }
-

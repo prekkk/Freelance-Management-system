@@ -48,6 +48,10 @@ Route::group(['prefix' => 'admin','middleware' => 'checkRole'], function(){
     Route::delete('/jobs',[JobController::class,'destroy'])->name('admin.jobs.destroy');
     Route::get('/job-applications',[JobApplicationController::class,'index'])->name('admin.jobApplications');
     Route::delete('/job-applications',[JobApplicationController::class,'destroy'])->name('admin.jobApplications.destroy');
+    Route::get('/freelancers', [FreelancersController::class, 'index'])->name('admin.freelancers.index');
+    Route::get('/freelancers/{id}/edit', [FreelancersController::class, 'edit'])->name('admin.freelancers.edit');
+    Route::put('/freelancers/{id}', [FreelancersController::class, 'update'])->name('admin.freelancers.update');
+    Route::delete('/freelancers/{id}', [FreelancersController::class, 'destroy'])->name('admin.freelancers.destroy');
 });
 
 
