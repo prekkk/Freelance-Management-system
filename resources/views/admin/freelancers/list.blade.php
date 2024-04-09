@@ -38,6 +38,7 @@
                                         <th scope="col">Name</th>
                                         <th scope="col">Designation</th>
                                         <th scope="col">Location</th>
+                                        <th scope="col">Reward Points</th> 
                                         <th scope="col">Action</th>
                                     </tr>
                                 </thead>
@@ -51,6 +52,7 @@
                                             </td>
                                             <td>{{ $freelancer->designation }}</td>
                                             <td>{{ $freelancer->location }}</td>
+                                            <td>{{ $freelancer->rewards }}</td>
                                 
                                             <td>
                                                 <div class="action-dots">

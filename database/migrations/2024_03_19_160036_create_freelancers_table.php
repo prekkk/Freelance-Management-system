@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('designation');
             $table->string('email')->unique();
             $table->string('location');
+            $table->integer('reward_points')->default(0);
            // $table->boolean('status')->default(true); // Add status column
             $table->timestamps();
         });

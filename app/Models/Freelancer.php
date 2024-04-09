@@ -13,6 +13,7 @@ class Freelancer extends Model
         'name',
         'designation',
         'location',
+        'rewards',
         '_token', // Add _token to the fillable array
     ];
 

@@ -95,24 +95,31 @@ class FreelancersController extends Controller
         return view('admin.freelancers.edit', ['freelancer' => $freelancer]);
     }
 
-    // This method will update the freelancer data
+   // This method will update the freelancer data
 public function update(Request $request, $id)
 {
+    Log::debug($request->all());
+
     $freelancer = Freelancer::findOrFail($id);
 
+    // Validate the request data including the reward points field
     $request->validate([
         'name' => 'required',
         'designation' => 'required',
         'location' => 'required',
+        'rewards' => 'nullable|integer|min:0', // Add validation for reward points
     ]);
 
-    $data = $request->except(['_token']); // Exclude _token field from request data
+    // Retrieve all the data except for _token from the request
+    $data = $request->except(['_token']);
 
+    // Update the freelancer data
     $freelancer->update($data);
 
-    return redirect()->route('admin.freelancers.index')
+    return redirect()->route('admin.freelancers.freelancerlist')
                      ->with('success', 'Freelancer updated successfully');
 }
+
 
 public function destroy($id)
 {

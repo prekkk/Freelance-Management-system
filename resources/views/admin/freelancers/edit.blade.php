@@ -40,6 +40,10 @@
                                     <label for="location" class="mb-2">Location</label>
                                     <input type="text" name="location" id="location"  placeholder="Location" class="form-control" value="{{ $freelancer->location }}">
                                 </div>
+                                <div class="mb-4">
+                                    <label for="reward_points" class="mb-2">Reward Points</label>
+                                    <input type="number" name="reward_points" id="reward_points" placeholder="Reward Points" class="form-control" value="{{ $freelancer->rewards }}">
+                                </div>                                
                             </div>
                             <div class="card-footer  p-4">
                                 <button type="submit" class="btn btn-primary">Update</button>

@@ -32,6 +32,7 @@
                                         <h4>{{ $freelancer->name }}</h4>
                                         <p>{{ $freelancer->designation }}</p>
                                         <p>{{ $freelancer->location }}</p>
+                                        <p>Reward Points: {{ $freelancer->rewards }}</p>
                                         <!-- Other freelancer details -->
                                     </div>
                                 </div>
