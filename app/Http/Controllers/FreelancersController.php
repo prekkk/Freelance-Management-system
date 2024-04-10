@@ -20,29 +20,30 @@ class FreelancersController extends Controller
     // This method will show the freelancers page
     public function index(Request $request)
     {
-        // Fetch all freelancers
-        $freelancers = Freelancer::where('status', 1);
+        $freelancers = Freelancer::query();
 
-        // Apply filtering based on location
         if ($request->has('location')) {
-            $freelancers->where('location', $request->location);
+            $freelancers->where('location', 'like', '%' . $request->location . '%');
         }
 
-        // Apply filtering based on designation
         if ($request->has('designation')) {
-            $freelancers->where('designation', $request->designation);
+            $freelancers->where('designation', 'like', '%' . $request->designation . '%');
         }
 
-        // Paginate the results
+        if ($request->has('rewards')) {
+            $freelancers->where('rewards', $request->rewards);
+        }
+
+        // Apply sorting
+        if ($request->has('sort')) {
+            $freelancers->orderBy('created_at', $request->sort == '1' ? 'desc' : 'asc');
+        }
+
         $freelancers = $freelancers->paginate(9);
 
-        return view('front.freelancers', [
-            'freelancers' => $freelancers,
-        ]);
+        return view('front.freelancers', compact('freelancers'));
     }
-
-
-
+    
    // This method will show freelancer detail page
    public function detail($id)
    {

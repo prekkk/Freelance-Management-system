@@ -75,13 +75,13 @@
                             @if (Auth::check())
                                 <a href="#" onclick="saveJob({{ $job->id }});" class="btn btn-secondary">Save</a>  
                             @else
-                                <a href="javascript:void(0);" class="btn btn-secondary disabled">Login to Save</a>
+                                <a href="{{ route('account.login') }}" class="btn btn-secondary disabled">Login to Save</a>
                             @endif
 
                             @if (Auth::check())
                                 <a href="#" onclick="applyJob({{ $job->id }})" class="btn btn-primary">Apply</a>
                             @else
-                                <a href="javascript:void(0);" class="btn btn-primary disabled">Login to Apply</a>
+                                <a href="{{ route('account.login') }}" class="btn btn-primary disabled">Login to Apply</a>
                             @endif
                             
 
