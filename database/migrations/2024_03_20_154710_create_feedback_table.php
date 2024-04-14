@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('feedback', function (Blueprint $table) {
             $table->id();
             $table->foreignId('freelancer_id')->constrained()->onDelete('cascade');
-            $table->text('message');
+            $table->text('message')->after('id');
             $table->timestamps();
         });
     }

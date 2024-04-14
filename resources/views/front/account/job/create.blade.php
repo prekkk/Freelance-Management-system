@@ -21,6 +21,7 @@
                 @include('front.message')
 
                 <form action="{{ route('account.createJob') }}" method="post" id="createJobForm" name="createJobForm">
+                    @csrf
                     <div class="card border-0 shadow mb-4 ">
                         <div class="card-body card-form p-4">
                             <h3 class="fs-4 mb-1">Job Details</h3>

@@ -185,4 +185,14 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    'locale' => env('APP_LOCALE', 'en'),
+
+    'fallback_locale' => 'en',
+    
+    'supported_locales' => [
+        'en' => 'English',
+        'ne' => 'नेपाली',
+    ],
+       
+
 ];

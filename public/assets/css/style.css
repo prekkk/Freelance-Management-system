@@ -10034,3 +10034,34 @@ footer .nav-link {
 .pagination span{
   font-size: inherit;
 }
+
+    .khalticontainer {
+        width: 300px;
+        border: 2px solid #5C2D91;
+        margin: 0 auto;
+        padding: 8px;
+    }
+
+    input {
+        display: block;
+        width: 98%;
+        padding: 8px;
+        margin: 2px;
+    }
+
+    button {
+        display: block;
+        background-color: #5C2D91;
+        border: none;
+        color: white;
+        cursor: pointer;
+
+        width: 98%;
+        padding: 8px;
+        margin: 2px;
+    }
+
+    button:hover {
+        opacity: 0.8;
+    }
+

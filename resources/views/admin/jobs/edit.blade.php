@@ -21,7 +21,7 @@
             <div class="col-lg-9">
                 @include('front.message')
                  
-                <form action="" method="post" id="editJobForm" name="editJobForm">
+                <form action="" method="get" id="editJobForm" name="editJobForm">
                     <div class="card border-0 shadow mb-4 ">
                         <div class="card-body card-form p-4">
                             <h3 class="fs-4 mb-1">Edit Job Details</h3>

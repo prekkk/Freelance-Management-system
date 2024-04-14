@@ -5,11 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Job;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class HomeController extends Controller
 {
     // This method will show our home page
-    public function index() {
+    public function index(Request $request) {
+        // Get the selected locale from the request
+        $locale = $request->get('locale');
+
+        // Check if the selected locale is supported
+        if (array_key_exists($locale, config('app.supported_locales'))) {
+            // Set the application locale
+            App::setLocale($locale);
+            // Store the selected locale in the session
+            session()->put('locale', $locale);
+        }
 
         $categories = Category::where('status',1)->orderBy('name','ASC')->take(8)->get();
 

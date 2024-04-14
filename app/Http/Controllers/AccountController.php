@@ -411,6 +411,24 @@ Session()->flash('success','Profile picture updated successfully.');
         ]);
 
     }
+    public function saveFreelancer(Request $request)
+{
+    // Validate the incoming request
+    $request->validate([
+        'freelancer_id' => 'required|exists:freelancers,id',
+        // Add more validation rules as needed
+    ]);
+
+    // Retrieve the freelancer ID from the request
+    $freelancerId = $request->input('freelancer_id');
+
+    // Perform any necessary logic to save the freelancer
+    // For example, you can save the freelancer ID to the user's profile, etc.
+
+    // Redirect back with a success message
+    return redirect()->back()->with('success', 'Freelancer saved successfully');
+}
+
 
 
 }

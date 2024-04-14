@@ -32,7 +32,8 @@
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" aria-current="page" href="{{ route("freelancers") }}">Find Freelancers</a>
-					</li>										
+					</li>	
+														
 				</ul>	
 				
 				@if (!Auth::check())
@@ -79,6 +80,12 @@
 </div>
 
 <footer class="bg-dark py-3 bg-2">
+	<!-- Language Switcher -->
+<div>
+    <a href="{{ route('changeLanguage', 'en') }}">English</a> | 
+    <a href="{{ route('changeLanguage', 'ne') }}">नेपाली</a>
+</div>
+
 <div class="container">
     <p class="text-center text-white pt-3 fw-bold fs-6">© 2023 xyz company, all right reserved</p>
 </div>

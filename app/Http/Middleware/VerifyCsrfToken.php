@@ -11,7 +11,11 @@ class VerifyCsrfToken extends Middleware
      *
      * @var array<int, string>
      */
+    protected $addHttpCookie = true;
+
     protected $except = [
-        //
+        'save-job',
+        'apply-job', // Add this line to include the save-job route
+        'create-job',
     ];
 }

@@ -73,13 +73,13 @@
                         <div class="pt-3 text-end">
                             
                             @if (Auth::check())
-                                <a href="#" onclick="saveJob({{ $job->id }});" class="btn btn-secondary">Save</a>  
+                                <a href="" onclick="saveJob({{ $job->id }});" class="btn btn-secondary">Save</a>  
                             @else
                                 <a href="{{ route('account.login') }}" class="btn btn-secondary disabled">Login to Save</a>
                             @endif
 
                             @if (Auth::check())
-                                <a href="#" onclick="applyJob({{ $job->id }})" class="btn btn-primary">Apply</a>
+                                <a href="" onclick="applyJob({{ $job->id }})" class="btn btn-primary">Apply</a>
                             @else
                                 <a href="{{ route('account.login') }}" class="btn btn-primary disabled">Login to Apply</a>
                             @endif
@@ -190,11 +190,13 @@
 function applyJob(id){
     if (confirm("Are you sure you want to apply on this job?")) {
         $.ajax({
-            url : '{{ route("applyJob") }}',
+            url: '{{ route("applyJob") }}',
             type: 'post',
-            data: {id:id},
+            data: {
+                id: id,
+                _token: '{{ csrf_token() }}' // Add the CSRF token here
+            },
             dataType: 'json',
-            _token: csrfToken,
             success: function(response) {
                 window.location.href = "{{ url()->current() }}";
             } 
@@ -204,11 +206,13 @@ function applyJob(id){
 
 function saveJob(id){
     $.ajax({
-        url : '{{ route("saveJob") }}',
+        url: '{{ route("saveJob") }}',
         type: 'post',
-        data: {id:id},
+        data: {
+            id: id,
+            _token: '{{ csrf_token() }}' // Add the CSRF token here
+        },
         dataType: 'json',
-        _token: csrfToken,
         success: function(response) {
             window.location.href = "{{ url()->current() }}";
         } 
