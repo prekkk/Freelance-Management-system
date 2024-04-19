@@ -20,7 +20,9 @@
             <div class="col-lg-9">
                 @include('front.message')
                 <div class="card border-0 shadow mb-4">
-                    <form action="" method="post" id="userForm" name="userForm">
+                    <form action="/account/update-profile" method="post" id="userForm" name="userForm">
+                        @csrf
+                        @method('PUT')
                         <div class="card-body  p-4">
                             <h3 class="fs-4 mb-1">My Profile</h3>
                             <div class="mb-4">
@@ -49,7 +51,15 @@
                 </div>
 
                 <div class="card border-0 shadow mb-4">
-                    <form action="" method="post" id="changePasswordForm" name="changePasswordForm">
+                    @if(session('updatePasswordError'))
+                    <div class="alert alert-danger">
+                        {{ session('updatePasswordError') }}
+                    </div>
+                    @endif
+                    
+                    <form action="/account/update-password" method="post" id="changePasswordForm" name="changePasswordForm">
+                        @method('PUT')
+                        @csrf
                         <div class="card-body p-4">
                             <h3 class="fs-4 mb-1">Change Password</h3>
                             <div class="mb-4">
@@ -205,6 +215,6 @@ $("#changePasswordForm").submit(function(e){
 
         }
     });
-}); 
+});
 </script>
 @endsection

@@ -20,7 +20,7 @@
             <div class="col-lg-9">
                 @include('front.message')
 
-                <form action="{{ route('account.createJob') }}" method="post" id="createJobForm" name="createJobForm">
+                <form action="{{ route('account.saveJob') }}" method="post" id="createJobForm" name="createJobForm">
                     @csrf
                     <div class="card border-0 shadow mb-4 ">
                         <div class="card-body card-form p-4">

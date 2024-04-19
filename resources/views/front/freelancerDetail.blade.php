@@ -76,9 +76,9 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        {{-- <div class="col-md-4">
 			<button id="payment-button" class="btn btn-primary">Pay with Khalti</button>
-		</div>
+		</div> --}}
     </section>
 @endsection
 

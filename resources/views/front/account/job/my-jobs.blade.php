@@ -90,7 +90,7 @@
 @endsection
 @section('customJs')
 <script type="text/javascript">   
-function deleteJob(jobId) {
+function deleteJobs(jobId) {
     if (confirm("Are you sure you want to delete?")) {
         $.ajax({
             url : '{{ route("account.deleteJob") }}',

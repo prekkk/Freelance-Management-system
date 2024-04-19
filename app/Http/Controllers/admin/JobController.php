@@ -40,62 +40,53 @@ class JobController extends Controller
             'vacancy' => 'required|integer',
             'location' => 'required|max:50',
             'description' => 'required',        
-
         ];
 
-        $validator = Validator::make($request->all(),$rules);
+        $validator = Validator::make($request->all(), $rules);
 
         if ($validator->passes()) {
 
             $job = Job::find($id);
-            $job->title = $request->title;
-            $job->category_id = $request->category;
-            $job->job_type_id  = $request->jobType;
-            $job->vacancy = $request->vacancy;
-            $job->salary = $request->salary;
-            $job->location = $request->location;
-            $job->description = $request->description;
-            $job->benefits = $request->benefits;
-            $job->responsibility = $request->responsibility;
-            $job->qualifications = $request->qualifications;
-            $job->keywords = $request->keywords;
-           
+            if ($job) {
+                $job->title = $request->title;
+                $job->category_id = $request->category;
+                $job->job_type_id  = $request->jobType;
+                $job->vacancy = $request->vacancy;
+                $job->salary = $request->salary;
+                $job->location = $request->location;
+                $job->description = $request->description;
+                $job->benefits = $request->benefits;
+                $job->responsibilities = $request->responsibility;
+                $job->qualifications = $request->qualifications;
+                $job->keywords = $request->keywords;
+                $job->status = $request->status;
+                $job->isFeatured = (!empty($request->isFeatured)) ? $request->isFeatured : 0;
+                $job->save();
 
-            $job->status = $request->status;
-            $job->isFeatured = (!empty($request->isFeatured)) ? $request->isFeatured : 0;
-            $job->save();
-
-            session()->flash('success','Job updated successfully.');
-
-            return response()->json([
-                'status' => true,
-                'errors' => []
-            ]);
+                session()->flash('success','Job updated successfully.');
+            } else {
+                session()->flash('error','Job not found.');
+            }
 
         } else {
-            return response()->json([
-                'status' => false,
-                'errors' => $validator->errors()
-            ]);
+            session()->flash('error', 'Validation failed. Please check your inputs.');
         }
+
+        return redirect()->route('admin.jobs');
     }
 
     public function destroy(Request $request) {
         $id = $request->id;
-
+    
         $job = Job::find($id);
-
+    
         if ($job == null) {
             session()->flash('error','Either job deleted or not found');
-            return response()->json([
-                'status' => false                
-            ]);
+        } else {
+            $job->delete();
+            session()->flash('success','Job deleted successfully.');
         }
-
-        $job->delete();
-        session()->flash('success','Job deleted successfully.');
-        return response()->json([
-            'status' => true                
-        ]);
-    }
+    
+        return redirect()->route('admin.jobs');
+    }    
 }

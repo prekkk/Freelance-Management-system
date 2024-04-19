@@ -47,8 +47,8 @@ Route::post('/ajax/khalti/verify_job', [KhaltiPaymentController::class, 'verifyJ
 Route::group(['prefix' => 'admin', 'middleware' => 'checkRole'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/users', [UserController::class, 'index'])->name('admin.users');
-    Route::get('/users/{id}', [UserController::class, 'edit'])->name('admin.users.edit');
-    Route::put('/users/{id}', [UserController::class, 'update'])->name('admin.users.update');
+    Route::get('/usersedit/{id}', [UserController::class, 'edit'])->name('admin.users.edit');
+    Route::put('/usersupdate/{id}', [UserController::class, 'update'])->name('admin.users.update');
     Route::delete('/users', [UserController::class, 'destroy'])->name('admin.users.destroy');
     Route::get('/jobs', [JobController::class, 'index'])->name('admin.jobs');
     Route::get('/jobs/edit/{id}', [JobController::class, 'edit'])->name('admin.jobs.edit');
@@ -79,18 +79,18 @@ Route::group(['prefix' => 'account'], function () {
         Route::get('/logout', [AccountController::class, 'logout'])->name('account.logout');
         Route::put('/update-profile', [AccountController::class, 'updateProfile'])->name('account.updateProfile');
         Route::post('/update-profile-pic', [AccountController::class, 'updateProfilePic'])->name('account.updateProfilePic');
-        Route::post('/create-job', [AccountController::class, 'createJob'])->name('account.createJob');
+        Route::get('/create-job', [AccountController::class, 'createJob'])->name('account.createJob');
         Route::post('/save-job', [AccountController::class, 'saveJob'])->name('account.saveJob');
         Route::get('/my-jobs', [AccountController::class, 'myJobs'])->name('account.myJobs');
         Route::get('/my-jobs/edit/{jobId}', [AccountController::class, 'editJob'])->name('account.editJob');
         Route::post('/update-job/{jobId}', [AccountController::class, 'updateJob'])->name('account.updateJob');
-        Route::post('/delete-job', [AccountController::class, 'deleteJob'])->name('account.deleteJob');
+        Route::post('/delete-job', [AccountController::class, 'deleteJobs'])->name('account.deleteJob');
         Route::get('/my-job-applications', [AccountController::class, 'myJobApplications'])->name('account.myJobApplications');
 
         Route::post('/remove-job-application', [AccountController::class, 'removeJobs'])->name('account.removeJobs');
         Route::get('/saved-jobs', [AccountController::class, 'savedJobs'])->name('account.savedJobs');
         Route::post('/remove-saved-job', [AccountController::class, 'removeSavedJob'])->name('account.removeSavedJob');
-        Route::post('/update-password', [AccountController::class, 'updatePassword'])->name('account.updatePassword');
+        Route::put('/update-password', [AccountController::class, 'updatePassword'])->name('account.updatePassword');
         Route::post('/save-freelancer', [AccountController::class, 'saveFreelancer'])->name('account.saveFreelancer');
     });
    

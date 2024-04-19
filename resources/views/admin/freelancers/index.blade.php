@@ -54,11 +54,15 @@
                                                 <td>{{ $freelancer->location }}</td>
                                                 <td>{{ $freelancer->rewards }}</td>
                                                 <td>
-                                                    <div class="action-dots">
-                                                        <a href="{{ route("admin.freelancers.edit", $freelancer->id) }}" class="btn btn-sm btn-info">Edit</a>
-                                                        <button class="btn btn-sm btn-danger" onclick="deleteFreelancer({{ $freelancer->id }})">Delete</button>
-
-                                                    </div>
+                                                    <div class="action-dots ">
+                                                    <button href="#" class="btn" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-end">
+                                                        <li><a class="dropdown-item" href="{{ route("admin.freelancers.edit", $freelancer->id) }}"><i class="fa fa-edit" aria-hidden="true"></i> Edit</a></li>
+                                                        <li><a class="dropdown-item" href="#" onclick="deleteFreelancer({{ $freelancer->id }})"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a></li>
+                                                    </ul>
+                                                </div>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -85,10 +89,10 @@
 @section('customJs')
 <script type="text/javascript">
     function deleteFreelancer(id){
-        console.log('Delete button clicked for freelancer ID:', id); // Log the ID for debugging
+        console.log('Delete button clicked for freelancer ID:', id); 
         if(confirm("Are you sure you want to delete?")){
             $.ajax({
-                url: '{{ route("admin.freelancers.destroy", ":id") }}'.replace(':id', id), // Replace ":id" with the actual ID
+                url: '{{ route("admin.freelancers.destroy", ":id") }}'.replace(':id', id), 
                 type: 'delete',
                 dataType: 'json',
                 success: function(response) {

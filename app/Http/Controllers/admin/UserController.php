@@ -18,6 +18,12 @@ class UserController extends Controller
 
     public function edit($id) {
         $user = User::findOrFail($id);
+
+        if (!$user) {
+            // User not found, handle gracefully
+            session()->flash('error', 'User not found');
+            return redirect()->route('admin.users.index');
+        }
         
         return view('admin.users.edit',[
             'user' => $user
