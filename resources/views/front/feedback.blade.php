@@ -26,17 +26,29 @@
                         <!-- Add a hidden input field for freelancer_id -->
                         <input type="hidden" id="freelancer_id" name="freelancer_id" value="{{ $freelancer->id }}">
                         <!-- Other form fields for feedback -->
-                        {{-- <div class="mb-3">
-                            <label for="name" class="form-label">Your Name</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Your Email</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
-                        </div> --}}
                         <div class="mb-3">
                             <label for="message" class="form-label">Your Message</label>
                             <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="rating" class="form-label">Rating</label>
+                            <select class="form-control" id="rating" name="rating" required>
+                                <option value="">Select Rating</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="feedback_type" class="form-label">Feedback Type</label>
+                            <select class="form-control" id="feedback_type" name="feedback_type" required>
+                                <option value="">Select Feedback Type</option>
+                                <option value="Positive">Positive</option>
+                                <option value="Neutral">Neutral</option>
+                                <option value="Negative">Negative</option>
+                            </select>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit Feedback</button>
                     </form>
@@ -45,4 +57,3 @@
         </div>
     </section>
 @endsection
-

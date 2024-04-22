@@ -43,7 +43,7 @@
                                         <tr class="active">
                                             <td>
                                                 <div class="job-name fw-500">{{ $savedJob->job->title }}</div>
-                                                <div class="info1">{{ $savedJob->job->jobType->name }} . {{ $savedJob->job->location }}</div>
+                                                {{-- <div class="info1">{{ $savedJob->job->jobType->name }} . {{ $savedJob->job->location }}</div> --}}
                                             </td>
                                             <td>{{ $savedJob->job->applications->count() }} Applications</td>
                                             <td>

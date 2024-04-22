@@ -12,6 +12,7 @@ use App\Models\JobType;
 use App\Models\Job;
 use App\Models\SavedJob;
 use App\Models\JobApplication;
+use Illuminate\Support\Facades\Storage;
 
 class AccountController extends Controller
 {
@@ -21,36 +22,35 @@ class AccountController extends Controller
         return view('front.account.registration');
     }
 
-    //This method shows user login page
     public function processRegistration(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:5|same:confirm_password',
-            'confirm_password' => 'required',
-        ]);
-        if ($validator->passes()) {
-            $hashedPassword = Hash::make($request->password);
-            $user = new User();
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->password = Hash::make($request->password);
-            $user->confirm_password = $request->name;
-            $user->save();
+{
+    $validator = Validator::make($request->all(), [
+        'name' => 'required',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|min:5|same:confirm_password',
+        'confirm_password' => 'required',
+    ]);
+    
+    if ($validator->passes()) {
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password); // Use Hash::make() directly
+        $user->save();
 
-            session()->flash('success', 'You have registered successfully.');
-            return response()->json([
-                'status' => true,
-                'errors' => []
-            ]);
-        } else {
-            return response()->json([
-                'status' => false,
-                'errors' => $validator->errors()
-            ]);
-        }
+        session()->flash('success', 'You have registered successfully.');
+        return response()->json([
+            'status' => true,
+            'errors' => []
+        ]);
+    } else {
+        return response()->json([
+            'status' => false,
+            'errors' => $validator->errors()
+        ]);
     }
+}
+
     //This method shows user login page
     public function login()
     {
@@ -166,46 +166,54 @@ class AccountController extends Controller
         ]);
     }
     public function saveJob(Request $request)
-    {
+{
+    $rules = [
+        'title' => 'required|min:2|max:100',
+        'category' => 'required',
+        'jobType' => 'required',
+        'vacancy' => 'required|integer',
+        'location' => 'required|max:50',
+        'description' => 'required',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ];
 
-        $rules = [
-            'title' => 'required|min:5|max:100',
-            'category' => 'required',
-            'jobType' => 'required',
-            'vacancy' => 'required|integer',
-            'location' => 'required|max:50',
-            'description' => 'required',
+    $validator = Validator::make($request->all(), $rules);
 
-        ];
-        $validator = Validator::make($request->all(), $rules);
+    if ($validator->passes()) {
+        $imagePath = null;
 
-        if ($validator->passes()) {
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('public/job_images');
+            $imagePath = Storage::url($path);
+        }
 
-            $job = new Job();
-            $job->title = $request->title;
-            $job->category_id = $request->category;
-            $job->job_type_id = $request->jobType;
-            $job->user_id = Auth::user()->id;
-            $job->vacancy = $request->vacancy;
-            $job->salary = $request->salary;
-            $job->location = $request->location;
-            $job->description = $request->description;
-            $job->benefits = $request->benefits;
-            $job->responsibilities = $request->responsibilities;
-            $job->qualifications = $request->qualifications;
-            $job->keywords = $request->keywords;
-            $job->save();
+        $job = new Job();
+        $job->title = $request->title;
+        $job->category_id = $request->category;
+        $job->job_type_id = $request->jobType;
+        $job->user_id = Auth::user()->id;
+        $job->vacancy = $request->vacancy;
+        $job->salary = $request->salary;
+        $job->location = $request->location;
+        $job->description = $request->description;
+        $job->benefits = $request->benefits;
+        $job->responsibilities = $request->responsibility;
+        $job->qualifications = $request->qualifications;
+        $job->keywords = $request->keywords;
+        $job->image = $imagePath;
+        $job->save();
 
-            session()->flash('success', 'Job posted successfully.');
-
-        // Redirect to a route or URL that displays the success message
-        return redirect()->route('account.createJob');
-
+        return response()->json([
+            'status' => true,
+            'message' => 'Job posted successfully.',
+        ]);
     } else {
-        // Redirect back with errors
-        return redirect()->back()->withErrors($validator)->withInput();
+        return response()->json([
+            'status' => false,
+            'errors' => $validator->errors(),
+        ], 422);
     }
-    }
+}
 
     public function myJobs()
     {
@@ -233,54 +241,53 @@ class AccountController extends Controller
             'categories' => $categories,
             'jobTypes' => $jobTypes,
             'job' => $job,
+            'id'    => $id
         ]);
     }
 
     public function updateJob(Request $request, $id)
-    {
-        $rules = [
-            'title' => 'required|min:5|max:100',
-            'category' => 'required',
-            'jobType' => 'required',
-            'vacancy' => 'required|integer',
-            'location' => 'required|max:50',
-            'description' => 'required',
+{
+    $rules = [
+        'title' => 'required|min:5|max:100',
+        'category' => 'required',
+        'jobType' => 'required',
+        'vacancy' => 'required|integer',
+        'location' => 'required|max:50',
+        'description' => 'required',
+    ];
 
-        ];
-        $validator = Validator::make($request->all(), $rules);
+    $validator = Validator::make($request->all(), $rules);
 
-        if ($validator->passes()) {
+    if ($validator->passes()) {
+        $job = Job::find($id);
 
-            $job = Job::find($id);
-            $job->title = $request->title;
-            $job->category_id = $request->category;
-            $job->job_type_id = $request->jobType;
-            $job->user_id = Auth::user()->id;
-            $job->vacancy = $request->vacancy;
-            $job->salary = $request->salary;
-            $job->location = $request->location;
-            $job->description = $request->description;
-            $job->benefits = $request->benefits;
-            $job->responsibilities = $request->responsibilities;
-            $job->qualifications = $request->qualifications;
-            $job->keywords = $request->keywords;
-            $job->save();
-
-            session()->flash('success', 'Job updated successfully.');
-
-            return response()->json([
-                'status' => true,
-                'errors' => []
-
-            ]);
-        } else {
-            return response()->json([
-                'status' => false,
-                'errors' => $validator->erros()
-
-            ]);
+        if (!$job) {
+            // Handle case where job with the given ID is not found
+            return redirect()->back()->with('error', 'Job not found.');
         }
+
+        $job->title = $request->title;
+        $job->category_id = $request->category;
+        $job->job_type_id = $request->jobType;
+        $job->user_id = Auth::user()->id;
+        $job->vacancy = $request->vacancy;
+        $job->salary = $request->salary;
+        $job->location = $request->location;
+        $job->description = $request->description;
+        $job->benefits = $request->benefits;
+        $job->responsibilities = $request->responsibilities;
+        $job->qualifications = $request->qualifications;
+        $job->keywords = $request->keywords;
+        $job->save();
+
+        session()->flash('success', 'Job updated successfully.');
+
+        return redirect()->route('account.editJob');
+    } else {
+        return redirect()->back()->withErrors($validator)->withInput();
     }
+}
+
     public function deleteJobs(Request $request)
     {
         $job = Job::where([
@@ -290,15 +297,11 @@ class AccountController extends Controller
 
         if ($job == null) {
             session()->flash('error', 'Either job deleted or not found.');
-            return response()->json([
-                'status' => true
-            ]);
+            return redirect()->route('account.myJobs');
         }
         Job::where('id', $request->jobId)->delete();
         session()->flash('success', 'Job deleted succesfully.');
-        return response()->json([
-            'status' => true
-        ]);
+        return redirect()->route('account.myJobs');
     }
     public function myJobApplications()
     {
@@ -418,4 +421,6 @@ class AccountController extends Controller
         // Redirect back with a success message
         return redirect()->back()->with('success', 'Freelancer saved successfully');
     }
+
+    
 }

@@ -166,7 +166,7 @@ class JobsController extends Controller
 
         Mail::to($employer->email)->send(new JobNotificationEmail($mailData));
 
-        $message = 'You have successfully applied.';
+        $message = 'You have successfully applied to this Job.';
 
         session()->flash('success',$message);
 

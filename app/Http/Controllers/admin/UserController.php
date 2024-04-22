@@ -49,10 +49,7 @@ class UserController extends Controller
 
             session()->flash('success','User information updated successfully.');
 
-            return response()->json([
-                'status' => true,
-                'errors' => []
-            ]);
+            return redirect('admin/usersedit/'  . $user->id);
 
         } else {
             return response()->json([

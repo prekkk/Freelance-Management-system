@@ -45,7 +45,16 @@
 					<a class="btn btn-outline-primary me-2" href="{{ route('account.profile') }}" type="submit">Account</a>			
 				@endif
 
-				<a class="btn btn-primary" href="{{ route('account.createJob') }}" type="submit">Post a Job</a>
+				<div class="dropdown">
+					<button class="btn btn-primary dropdown-toggle" type="button" id="postDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+					  Post
+					</button>
+					<ul class="dropdown-menu" aria-labelledby="postDropdown">
+					  <li><a class="dropdown-item" href="{{ route('account.createJob') }}">Post Job</a></li>
+					  <li><a class="dropdown-item" href="{{ route('freelancers') }}">Post Freelancer</a></li>
+					</ul>
+				  </div>
+				  
 			</div>
 		</div>
 	</nav>
@@ -87,7 +96,7 @@
 </div>
 
 <div class="container">
-    <p class="text-center text-white pt-3 fw-bold fs-6">© 2023 xyz company, all right reserved</p>
+    <p class="text-center text-white pt-3 fw-bold fs-6">© Job Junction, all right reserved</p>
 </div>
 </footer> 
 <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
@@ -95,6 +104,7 @@
 <script src="{{ asset('assets/js/instantpages.5.1.0.min.js') }}"></script>
 <script src="{{ asset('assets/js/lazyload.17.6.0.min.js') }}"></script>
 <script src="{{ asset('assets/js/custom.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
 	$.ajaxSetup({
@@ -131,6 +141,7 @@
 		
 	});
 	</script>
+	@yield('customJs')
 
 </body>
 </html>

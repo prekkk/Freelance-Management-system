@@ -59,7 +59,7 @@
                                                     </button>
                                                     <ul class="dropdown-menu dropdown-menu-end">
                                                         <li><a class="dropdown-item" href="{{ route("admin.users.edit", $user->id) }}"><i class="fa fa-edit" aria-hidden="true"></i> Edit</a></li>
-                                                        <li><a class="dropdown-item" href="#" onclick= "deleteUser({{ $user->id }})"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a></li>
+                                                        <li><a class="dropdown-item" href="javascript:void(0)" onclick= "deleteUser({{ $user->id }})"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a></li>
                                                     </ul>
                                                 </div>
                                             </td>
@@ -84,8 +84,8 @@
 
 @section('customJs')
 <script type = "text/javascript">
-    function deleteUser(id){
-        if(confirm("Are you sure you want to delete?")){
+
+    function deleteSubmit(id){
         $.ajax({
             url:'{{ route("admin.users.destroy") }}',
             type: 'delete',
@@ -97,6 +97,23 @@
             }
         });
     }
+    function deleteUser(id){
+        
+        Swal.fire({
+            title: "Are you sure you want to delete this user ?",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            denyButtonText: `No`
+            }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                deleteSubmit(id)
+            }
+            });
+
     }
+
+   
+    
 </script>
 @endsection

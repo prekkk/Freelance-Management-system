@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\App;
 class HomeController extends Controller
 {
     // This method will show our home page
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         // Get the selected locale from the request
         $locale = $request->get('locale');
 
@@ -22,28 +23,35 @@ class HomeController extends Controller
             session()->put('locale', $locale);
         }
 
-        $categories = Category::where('status',1)->orderBy('name','ASC')->take(8)->get();
+        // Fetch categories with their respective job counts
+        $categories = Category::withCount('jobs')
+            ->where('status', 1)
+            ->orderBy('name', 'ASC')
+            ->take(8)
+            ->get();
 
-        $newCategories = Category::where('status',1)->orderBy('name','ASC')->get();
+        $newCategories = Category::where('status', 1)
+            ->orderBy('name', 'ASC')
+            ->get();
 
-        $featuredJobs = Job::where('status',1)
-                        ->orderBy('created_at','DESC')
-                        ->with('jobType')
-                        ->where('isFeatured',1)->take(6)->get();
+        $featuredJobs = Job::where('status', 1)
+            ->orderBy('created_at', 'DESC')
+            ->with('jobType')
+            ->where('isFeatured', 1)
+            ->take(6)
+            ->get();
 
-        $latestJobs = Job::where('status',1)
-                        ->with('jobType')
-                        ->orderBy('created_at','DESC')
-                        ->take(6)->get();
+        $latestJobs = Job::where('status', 1)
+            ->with('jobType')
+            ->orderBy('created_at', 'DESC')
+            ->take(6)
+            ->get();
 
-
-
-        return view('front.home',[
+        return view('front.home', [
             'categories' => $categories,
             'featuredJobs' => $featuredJobs,
             'latestJobs' => $latestJobs,
             'newCategories' => $newCategories
         ]);
     }
-     
 }

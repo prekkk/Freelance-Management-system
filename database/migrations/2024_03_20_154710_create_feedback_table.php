@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('feedback', function (Blueprint $table) {
+        Schema::create('feedbacks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('freelancer_id')->constrained()->onDelete('cascade');
             $table->text('message')->after('id');
+            $table->foreignId('employer_id')->constrained()->onDelete('cascade');
+            $table->tinyInteger('rating')->unsigned();
+            $table->enum('feedback_type', ['Positive', 'Neutral', 'Negative']);
             $table->timestamps();
+            $table->foreignId('freelancer_id')->constrained()->onDelete('cascade');
         });
     }
 
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('feedback');
+        Schema::dropIfExists('feedbacks');
     }
 };

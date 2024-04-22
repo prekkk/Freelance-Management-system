@@ -22,7 +22,7 @@
                     @include('front.message')
                     <div class="card border-0 shadow mb-4">
                         <div class="card-body card-form">
-                            <form action="{{ route('admin.users.update', $users->id) }}" method="post" id="userForm" name="userForm">
+                            <form action="{{ route('admin.users.update', $user->id) }}" method="post" id="userForm" name="userForm">
                                 @csrf
                                 @method('PUT')
                                 

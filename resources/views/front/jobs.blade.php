@@ -56,7 +56,6 @@
                                 @endforeach
                             @endif
                         </div>
-
                         {{-- <div class="mb-4">
                             <h2>Experience</h2>
                             <select name="experience" id="experience" class="form-control">
@@ -104,10 +103,10 @@
                                                 </p>                                                
                                                 <p>Keywords: {{ $job->keywords }}</p>
                                                 <p>Category: {{ $job->category->name }}</p>
-                                                <p>Experience: {{ $job->experience }}</p>
+                                                {{-- <p>Experience: {{ $job->experience }}</p> --}}
                                                 @if (!is_null($job->salary))
                                                 <p class="mb-0">
-                                                    <span class="fw-bolder"><i class="fa fa-usd"></i></span>
+                                                    <span class="fw-bolder" style="color: green;">&#128182;</span>
                                                     <span class="ps-1">{{ $job->salary }}</span>
                                                 </p> 
                                                 @endif                                                
@@ -146,7 +145,7 @@
         var keyword = $("#keyword").val();
         var location = $("#location").val();
         var category = $("#category").val();
-        var experience = $("#experience").val();
+        // var experience = $("#experience").val();
         var sort = $("#sort").val();
 
         var checkedJobTypes = $("input:checkbox[name='job_type']:checked").map(function(){
@@ -168,10 +167,10 @@
             url += '&category='+category;
         }
 
-        // If experience has a value
-        if (experience != "") {
-            url += '&experience='+experience;
-        }
+        // // If experience has a value
+        // if (experience != "") {
+        //     url += '&experience='+experience;
+        // }
 
         // If user has checked job types
         if (checkedJobTypes.length > 0) {

@@ -66,7 +66,7 @@
                                                     <ul class="dropdown-menu dropdown-menu-end">
                                                         <li><a class="dropdown-item" href="{{ route('jobDetail', $job->id) }}"> <i class="fa fa-eye" aria-hidden="true"></i> View</a></li>
                                                         <li><a class="dropdown-item" href="{{ route('account.editJob', $job->id) }}"><i class="fa fa-edit" aria-hidden="true"></i> Edit</a></li>
-                                                        <li><a class="dropdown-item" href="#" onclick="deleteJob({{ $job->id }})" ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a></li>
+                                                        <li><a class="dropdown-item" href="javascript:void(0)" onclick="deleteJob({{ $job->id }})" ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a></li>
                                                     </ul>
                                                 </div>
                                             </td>
@@ -90,18 +90,31 @@
 @endsection
 @section('customJs')
 <script type="text/javascript">   
-function deleteJobs(jobId) {
-    if (confirm("Are you sure you want to delete?")) {
-        $.ajax({
+function deleteSubmit(id){
+    $.ajax({
             url : '{{ route("account.deleteJob") }}',
             type: 'post',
-            data: {jobId: jobId},
+            data: {jobId: id},
             dataType: 'json',
             success: function(response) {
                 window.location.href='{{ route("account.myJobs") }}';
             }
         });
-    } 
-}
+
+    }
+    function deleteJob(id){
+        
+        Swal.fire({
+            title: "Are you sure you want to delete the job?",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            denyButtonText: `No`
+            }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                deleteSubmit(id)
+            }
+            });
+    }
 </script>
 @endsection

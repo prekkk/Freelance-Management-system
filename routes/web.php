@@ -34,13 +34,14 @@ App::setLocale('ne');
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/jobs', [JobsController::class, 'index'])->name('jobs');
 Route::get('/freelancers', [FreelancersController::class, 'index'])->name('freelancers');
+Route::post('/account/create-freelancer', [FreelancersController::class, 'create'])->name('account.createFreelancer');
 Route::get('/freelancer/detail/{id}', [FreelancersController::class, 'detail'])->name('freelancer.show');
 Route::post('/freelancer/save', [FreelancersController::class, 'save'])->name('saveFreelancer');
 Route::get('/jobs/detail/{id}', [JobsController::class, 'detail'])->name('jobDetail');
 Route::get('/feedback/create/{freelancer_id}', [FeedbackController::class, 'create'])->name('feedback.create');
 Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.store');
 Route::post('/apply-job', [JobsController::class, 'applyJob'])->name('applyJob');
-Route::post('/save-job', [JobsController::class, 'saveJob'])->name('saveJob');
+Route::post('ACCOUNT/save-job', [JobsController::class, 'saveJob'])->name('saveJob');
 // Route for Khalti payment verification
 Route::post('/ajax/khalti/verify_job', [KhaltiPaymentController::class, 'verifyJob'])->name('ajax.khalti.verify_job');
 
@@ -86,7 +87,8 @@ Route::group(['prefix' => 'account'], function () {
         Route::post('/update-job/{jobId}', [AccountController::class, 'updateJob'])->name('account.updateJob');
         Route::post('/delete-job', [AccountController::class, 'deleteJobs'])->name('account.deleteJob');
         Route::get('/my-job-applications', [AccountController::class, 'myJobApplications'])->name('account.myJobApplications');
-
+        Route::post('/applications/{id}/accept', [JobApplicationController::class, 'acceptApplication'])->name('account.acceptApplication');
+        Route::post('/applications/{id}/reject', [JobApplicationController::class, 'rejectApplication'])->name('account.rejectApplication');
         Route::post('/remove-job-application', [AccountController::class, 'removeJobs'])->name('account.removeJobs');
         Route::get('/saved-jobs', [AccountController::class, 'savedJobs'])->name('account.savedJobs');
         Route::post('/remove-saved-job', [AccountController::class, 'removeSavedJob'])->name('account.removeSavedJob');

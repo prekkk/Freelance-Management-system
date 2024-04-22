@@ -88,9 +88,9 @@
 
 @section('customJs')
 <script type="text/javascript">
-    function deleteJob(id) {
-        if (confirm("Are you sure you want to delete?")) {
-            $.ajax({
+    
+    function deleteSubmit(id){
+        $.ajax({
                 url: '{{ route("admin.jobs.destroy") }}',
                 type: 'delete',
                 data: { id: id},
@@ -99,7 +99,22 @@
                     window.location.href = "{{ route('admin.jobs') }}";
                 }
             });
-        }
+
     }
+    function deleteJob(id){
+        
+        Swal.fire({
+            title: "Do you want to save the changes?",
+            showCancelButton: true,
+            confirmButtonText: "Save",
+            denyButtonText: `Don't save`
+            }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                deleteSubmit(id)
+            }
+            });
+    }
+
 </script>
 @endsection

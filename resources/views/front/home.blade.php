@@ -57,22 +57,25 @@
         <div class="container">
             <h2>Popular Categories</h2>
             <div class="row pt-5">
-
                 @if ($categories->isNotEmpty())
                     @foreach ($categories as $category)
+                        @php
+                            // Count the number of jobs for the current category
+                            $jobsCount = $category->jobs->count();
+                        @endphp
                         <div class="col-lg-4 col-xl-3 col-md-6">
                             <div class="single_catagory">
                                 <a href="{{ route('jobs') . '?category=' . $category->id }}">
                                     <h4 class="pb-2">{{ $category->name }}</h4>
                                 </a>
-                                <p class="mb-0"> <span>0</span> Available position</p>
+                                <p class="mb-0"><span>{{ $jobsCount }}</span> Available vacancy</p>
                             </div>
                         </div>
                     @endforeach
                 @endif
             </div>
         </div>
-    </section>
+    </section>            
 
     <section class="section-3  py-5">
         <div class="container">

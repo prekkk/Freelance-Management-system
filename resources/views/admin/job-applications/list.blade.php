@@ -29,7 +29,7 @@
                             </div>                            
                         </div>
                         <div class="table-responsive">
-                            <table class="table ">
+                            <table class="table">
                                 <thead class="bg-light">
                                     <tr>
                                         <th scope="col">Job Title</th>
@@ -40,36 +40,40 @@
                                     </tr>
                                 </thead>
                                 <tbody class="border-0">
-                                    @if ($applications->isNotEmpty())
-                                        @foreach ($applications as $application)
-                                        <tr>
-                                            <td>
-                                                <p>{{ $application->job->title }}</p>
-                                                {{-- <p>Applicants: {{ $job->applications->count() }}</p> --}}
-                                            </td>
-                                            <td>{{ $application->user->name }}</td>
-                                            <td>
-                                                {{ $application->employer->name }}
-                                            </td>
-                                            <td>{{ \Carbon\Carbon::parse($application->applied_date)->format('d M, Y') }}</td>
-                                            <td>
-                                                <div class="action-dots ">
-                                                    <button href="#" class="btn" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu dropdown-menu-end">
-                                                        <li><a class="dropdown-item" onclick="deleteJobApplication({{ $application->id }})" href="javascript:void(0);"  ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a></li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                    @forelse ($jobsWithoutAcceptedApplications as $job)
+                                        @foreach ($job->applications as $application)
+                                            <tr>
+                                                <td>
+                                                    <p>{{ $job->title }}</p>
+                                                    {{-- <p>Applicants: {{ $job->applications->count() }}</p> --}}
+                                                </td>
+                                                <td>{{ $application->user->name }}</td>
+                                                <td>
+                                                    {{ $application->employer->name }}
+                                                </td>
+                                                <td>{{ \Carbon\Carbon::parse($application->applied_date)->format('d M, Y') }}</td>
+                                                <td>
+                                                    <div class="action-dots">
+                                                        <button href="#" class="btn" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu dropdown-menu-end">
+                                                            <li><a class="dropdown-item" onclick="deleteJobApplication({{ $application->id }})" href="javascript:void(0);"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         @endforeach
-                                    @endif
+                                    @empty
+                                        <tr>
+                                            <td colspan="5">No job applications found.</td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>                                
                             </table>
                         </div>
                         <div>
-                            {{ $applications->links() }}
+                            {{-- {{ $jobsWithoutAcceptedApplications->links() }} --}}
                         </div>
                     </div>
                 </div>                          

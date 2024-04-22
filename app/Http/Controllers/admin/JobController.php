@@ -79,7 +79,6 @@ class JobController extends Controller
         $id = $request->id;
     
         $job = Job::find($id);
-    
         if ($job == null) {
             session()->flash('error','Either job deleted or not found');
         } else {
@@ -87,6 +86,6 @@ class JobController extends Controller
             session()->flash('success','Job deleted successfully.');
         }
     
-        return redirect()->route('admin.jobs');
+        return true;;
     }    
 }
