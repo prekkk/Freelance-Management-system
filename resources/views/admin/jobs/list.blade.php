@@ -104,10 +104,10 @@
     function deleteJob(id){
         
         Swal.fire({
-            title: "Do you want to save the changes?",
+            title: "Are you sure you want to delete this Job?",
             showCancelButton: true,
-            confirmButtonText: "Save",
-            denyButtonText: `Don't save`
+            confirmButtonText: "Yes",
+            denyButtonText: `No`
             }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {

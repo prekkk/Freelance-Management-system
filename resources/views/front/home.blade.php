@@ -157,7 +157,7 @@
                                             </p> --}}
                                                     @if (!is_null($latestJob->salary))
                                                         <p class="mb-0">
-                                                            <span class="fw-bolder"><i class="fa fa-usd"></i></span>
+                                                            <span class="fw-bolder" style="color: green;">&#128182;</span>
                                                             <span class="ps-1">{{ $latestJob->salary }}</span>
                                                         </p>
                                                     @endif

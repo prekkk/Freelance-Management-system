@@ -41,7 +41,7 @@ Route::get('/jobs/detail/{id}', [JobsController::class, 'detail'])->name('jobDet
 Route::get('/feedback/create/{freelancer_id}', [FeedbackController::class, 'create'])->name('feedback.create');
 Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.store');
 Route::post('/apply-job', [JobsController::class, 'applyJob'])->name('applyJob');
-Route::post('ACCOUNT/save-job', [JobsController::class, 'saveJob'])->name('saveJob');
+Route::post('account/save-job', [JobsController::class, 'saveJob'])->name('saveJob');
 // Route for Khalti payment verification
 Route::post('/ajax/khalti/verify_job', [KhaltiPaymentController::class, 'verifyJob'])->name('ajax.khalti.verify_job');
 
