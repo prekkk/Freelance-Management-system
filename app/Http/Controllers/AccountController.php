@@ -23,60 +23,91 @@ class AccountController extends Controller
     }
 
     public function processRegistration(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'name' => 'required',
-        'email' => 'required|email|unique:users,email',
-        'password' => 'required|min:5|same:confirm_password',
-        'confirm_password' => 'required',
-        
-    ]);
-    
-    if ($validator->passes()) {
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password); 
-        
-        $user->save();
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:5|same:confirm_password',
+            'confirm_password' => 'required',
 
-        session()->flash('success', 'You have registered successfully.');
-        return response()->json([
-            'status' => true,
-            'errors' => []
         ]);
-    } else {
-        return response()->json([
-            'status' => false,
-            'errors' => $validator->errors()
-        ]);
+
+        if ($validator->passes()) {
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+
+            $user->save();
+
+            session()->flash('success', 'You have registered successfully.');
+            return response()->json([
+                'status' => true,
+                'errors' => []
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
     }
-}
 
     //This method shows user login page
     public function login()
     {
         return view('front.account.login');
     }
-    public function authenticate(request $request)
+
+
+    public function authenticate(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required'
         ]);
-        if ($validator->passes()) {
-            $hashedPassword = Hash::make($request->password);
-            if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-                return redirect()->route('account.profile');
-            } else {
-                return redirect()->route('account.login')->with('error', 'Either Email/Password is incorrect');
-            }
-        } else {
+    
+        if ($validator->fails()) {
             return redirect()->route('account.login')
                 ->withErrors($validator)
                 ->withInput($request->only('email'));
         }
+    
+        // Attempt to authenticate the user
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            // Check if a role was selected
+            if ($request->has('selected_role') && in_array($request->input('selected_role'), ['employer', 'freelancer'])) {
+                // Store the selected role in the session
+                session(['selected_role' => $request->input('selected_role')]);
+            }            
+    
+            // Redirect to the appropriate page based on the role
+            $role = session('selected_role', ''); // Retrieve the selected role from the session
+            if ($role === 'employer') {
+                // Redirect to the employer dashboard
+                return redirect()->route('employer.dashboard');
+            } elseif ($role === 'freelancer') {
+                // Redirect to the freelancer dashboard
+                return redirect()->route('freelancer.dashboard');
+            } else {
+                // Default redirection if no role is specified
+                return redirect()->route('account.profile');
+            }
+        } else {
+            // Authentication failed, redirect back to login page with error message
+            return redirect()->route('account.login')->with('error', 'Invalid credentials.');
+        }
+    }    
+
+    public function chooseRole()
+    {
+        // Retrieve the selected role from the session or request
+        $selectedRole = session('selected_role'); // Assuming you stored it in the session
+
+        // Pass the selected role to the view
+        return view('front.account.choose-role', compact('selectedRole'));
     }
+
     public function profile()
     {
 
@@ -95,7 +126,8 @@ class AccountController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:5|max:20',
-            'email' => 'required|email'
+            'email' => 'required|email',
+            'mobile' => 'required|digits:10',
         ]);
         if ($validator->passes()) {
 
@@ -103,6 +135,7 @@ class AccountController extends Controller
             $user->name = $request->name;
             $user->email = $request->email;
             $user->mobile = $request->mobile;
+            $user->address = $request->address;
             $user->designation = $request->designation;
             $user->save();
 
@@ -168,54 +201,54 @@ class AccountController extends Controller
         ]);
     }
     public function saveJob(Request $request)
-{
-    $rules = [
-        'title' => 'required|min:2|max:100',
-        'category' => 'required',
-        'jobType' => 'required',
-        'vacancy' => 'required|integer',
-        'location' => 'required|max:50',
-        'description' => 'required',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ];
+    {
+        $rules = [
+            'title' => 'required|min:2|max:100',
+            'category' => 'required',
+            'jobType' => 'required',
+            'vacancy' => 'required|integer',
+            'location' => 'required|max:50',
+            'description' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ];
 
-    $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), $rules);
 
-    if ($validator->passes()) {
-        $imagePath = null;
+        if ($validator->passes()) {
+            $imagePath = null;
 
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('public/job_images');
-            $imagePath = Storage::url($path);
+            if ($request->hasFile('image')) {
+                $path = $request->file('image')->store('public/job_images');
+                $imagePath = Storage::url($path);
+            }
+
+            $job = new Job();
+            $job->title = $request->title;
+            $job->category_id = $request->category;
+            $job->job_type_id = $request->jobType;
+            $job->user_id = Auth::user()->id;
+            $job->vacancy = $request->vacancy;
+            $job->salary = $request->salary;
+            $job->location = $request->location;
+            $job->description = $request->description;
+            $job->benefits = $request->benefits;
+            $job->responsibilities = $request->responsibility;
+            $job->qualifications = $request->qualifications;
+            $job->keywords = $request->keywords;
+            $job->image = $imagePath;
+            $job->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Job posted successfully.',
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors(),
+            ], 422);
         }
-
-        $job = new Job();
-        $job->title = $request->title;
-        $job->category_id = $request->category;
-        $job->job_type_id = $request->jobType;
-        $job->user_id = Auth::user()->id;
-        $job->vacancy = $request->vacancy;
-        $job->salary = $request->salary;
-        $job->location = $request->location;
-        $job->description = $request->description;
-        $job->benefits = $request->benefits;
-        $job->responsibilities = $request->responsibility;
-        $job->qualifications = $request->qualifications;
-        $job->keywords = $request->keywords;
-        $job->image = $imagePath;
-        $job->save();
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Job posted successfully.',
-        ]);
-    } else {
-        return response()->json([
-            'status' => false,
-            'errors' => $validator->errors(),
-        ], 422);
     }
-}
 
     public function myJobs()
     {
@@ -248,47 +281,47 @@ class AccountController extends Controller
     }
 
     public function updateJob(Request $request, $id)
-{
-    $rules = [
-        'title' => 'required|min:5|max:100',
-        'category' => 'required',
-        'jobType' => 'required',
-        'vacancy' => 'required|integer',
-        'location' => 'required|max:50',
-        'description' => 'required',
-    ];
+    {
+        $rules = [
+            'title' => 'required|min:5|max:100',
+            'category' => 'required',
+            'jobType' => 'required',
+            'vacancy' => 'required|integer',
+            'location' => 'required|max:50',
+            'description' => 'required',
+        ];
 
-    $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), $rules);
 
-    if ($validator->passes()) {
-        $job = Job::find($id);
+        if ($validator->passes()) {
+            $job = Job::find($id);
 
-        if (!$job) {
-            // Handle case where job with the given ID is not found
-            return redirect()->back()->with('error', 'Job not found.');
+            if (!$job) {
+                // Handle case where job with the given ID is not found
+                return redirect()->back()->with('error', 'Job not found.');
+            }
+
+            $job->title = $request->title;
+            $job->category_id = $request->category;
+            $job->job_type_id = $request->jobType;
+            $job->user_id = Auth::user()->id;
+            $job->vacancy = $request->vacancy;
+            $job->salary = $request->salary;
+            $job->location = $request->location;
+            $job->description = $request->description;
+            $job->benefits = $request->benefits;
+            $job->responsibilities = $request->responsibilities;
+            $job->qualifications = $request->qualifications;
+            $job->keywords = $request->keywords;
+            $job->save();
+
+            session()->flash('success', 'Job updated successfully.');
+
+            return redirect()->route('account.editJob');
+        } else {
+            return redirect()->back()->withErrors($validator)->withInput();
         }
-
-        $job->title = $request->title;
-        $job->category_id = $request->category;
-        $job->job_type_id = $request->jobType;
-        $job->user_id = Auth::user()->id;
-        $job->vacancy = $request->vacancy;
-        $job->salary = $request->salary;
-        $job->location = $request->location;
-        $job->description = $request->description;
-        $job->benefits = $request->benefits;
-        $job->responsibilities = $request->responsibilities;
-        $job->qualifications = $request->qualifications;
-        $job->keywords = $request->keywords;
-        $job->save();
-
-        session()->flash('success', 'Job updated successfully.');
-
-        return redirect()->route('account.editJob');
-    } else {
-        return redirect()->back()->withErrors($validator)->withInput();
     }
-}
 
     public function deleteJobs(Request $request)
     {
@@ -387,7 +420,7 @@ class AccountController extends Controller
         ]);
 
         if ($validator->fails()) {
-            session()->flash('updatePasswordError',"Validation error");
+            session()->flash('updatePasswordError', "Validation error");
             return redirect('/account/profile');
         }
 
@@ -423,6 +456,4 @@ class AccountController extends Controller
         // Redirect back with a success message
         return redirect()->back()->with('success', 'Freelancer saved successfully');
     }
-
-    
 }

@@ -29,45 +29,55 @@
                                 <div class="freelancer_left">
                                     <!-- Fetch and display the image -->
                                     @if ($freelancer->profile_picture)
-                                        <img src="{{ asset($freelancer->profile_picture) }}" alt="Freelancer Image" class="img-fluid mb-3" style='max-width:200px; height:200px;'>
+                                        <img src="{{ asset($freelancer->profile_picture) }}" alt="Freelancer Image" class="img-fluid mb-3" style="max-width: 50px; height: 50px;">
                                     @endif
-                                    <div class="freelancer_content">
-                                        <h4>{{ $freelancer->name }}</h4>
-                                        <p>{{ $freelancer->designation }}</p>
-                                        <p>{{ $freelancer->location }}</p>
-                                    </div>
+                                </div>
+                                <div class="freelancer_content">
+                                    <!-- Display name with custom font and adjusted font size -->
+                                    <h4 style="font-family: 'Arial', sans-serif; font-size: 24px; margin-top: 20px;">{{ $freelancer->name }}</h4>
+                                    <!-- Display mobile number with adjusted font size -->
+                                    <p style="font-family: 'Arial', sans-serif; font-size: 18px;">Mobile: {{ $freelancer->mobile }}</p>
+                                    <!-- Display designation with adjusted font size -->
+                                    <p style="font-family: 'Arial', sans-serif; font-size: 18px;">Designation: {{ $freelancer->designation }}</p>
+                                    <!-- Display address with adjusted font size -->
+                                    <p style="font-family: 'Arial', sans-serif; font-size: 18px;">Address: {{ $freelancer->address }}</p>
+                                    <!-- Display location with adjusted font size -->
+                                    <p style="font-family: 'Arial', sans-serif; font-size: 18px;">Location: {{ $freelancer->location }}</p>
                                 </div>
                             </div>
                         </div>
                         <div class="descript_wrap mt-4">
                             <!-- Display short description -->
                             <div class="single_wrap">
-                                <h4>Short Description</h4>
-                                <p>{{ $freelancer->short_description }}</p>
+                                <h4 style="font-family: 'Arial', sans-serif; font-size: 20px;">Short Description</h4>
+                                <p style="font-family: 'Arial', sans-serif; font-size: 18px;">{{ $freelancer->short_description }}</p>
                             </div>
                             <!-- Display feedback from other users -->
                             <div class="single_wrap">
-                                <h4>Feedback</h4>
+                                <h4 style="font-family: 'Arial', sans-serif; font-size: 20px;">Feedback</h4>
                                 <div class="feedback_list">
                                     @if ($freelancer->feedbacks()->count() > 0)
                                         <ul>
                                             @foreach ($freelancer->feedbacks as $feedback)
-                                                <li>{{ $feedback->message }}</li>
+                                                <li style="font-family: 'Arial', sans-serif; font-size: 18px;">{{ $feedback->message }}</li>
                                                 <!-- Display other feedback details -->
                                             @endforeach
                                         </ul>
                                     @else
-                                        <p>No feedback available</p>
+                                        <p style="font-family: 'Arial', sans-serif; font-size: 18px;">No feedback available</p>
                                     @endif
                                 </div>
                             </div>
-                            <!-- Save freelancer button -->
-                            <div class="text-end mt-4">
-                                <form action="{{ route('account.saveFreelancer') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="freelancer_id" value="{{ $freelancer->id }}">
-                                    <button type="submit" class="btn btn-primary btn-sm">Save Freelancer</button>
-                                </form>
+                            <!-- Save freelancer button (for employers) -->
+                            <div class="border-bottom"></div>
+                            <div class="pt-3 text-end">
+                                @if (Auth::check() && Auth::user()->role == 'employer')
+                                    <a href="" onclick="saveFreelancer({{ $freelancer->id }});" class="btn btn-secondary">Save</a>  
+                                    <a href="" onclick="hireFreelancer({{ $freelancer->id }})" class="btn btn-primary">Hire</a>
+                                @else
+                                    <a href="{{ route('account.login') }}" class="btn btn-secondary disabled">Login to Save</a>
+                                    <a href="{{ route('account.login') }}" class="btn btn-primary disabled">Login to Apply</a>
+                                @endif
                             </div>
                         </div>
                     </div>

@@ -35,10 +35,16 @@
                                 <input type="text" name="email" id="email"  placeholder="Enter Email" class="form-control" value="{{ $user->email }}">
                                 <p></p>
                             </div>
+                            @if (Auth::check() && Auth::user()->role == 'freelancer')
                             <div class="mb-4">
                                 <label for="" class="mb-2">Designation</label>
                                 <input type="text" name="designation" id="designation"  placeholder="Designation" class="form-control" value="{{ $user->designation }}">
                             </div>
+                            @endif
+                            <div class="mb-4">
+                                <label for="" class="mb-2">Address</label>
+                                <input type="text" name="address" id="address" placeholder="Address" class="form-control" value="{{ $user->address }}">
+                            </div> 
                             <div class="mb-4">
                                 <label for="" class="mb-2">Mobile</label>
                                 <input type="text" name="mobile" id="mobile" placeholder="Mobile" class="form-control" value="{{ $user->mobile }}">

@@ -10,11 +10,7 @@
                 <div class="col-6 col-md-2">
                     <div class="align-end">
                         <form action="{{ route('freelancers') }}" method="GET">
-                            <select name="sort" id="sort" class="form-control">
-                                <option value="1" {{ request('sort') == '1' ? 'selected' : '' }}>Latest</option>
-                                <option value="0" {{ request('sort') == '0' ? 'selected' : '' }}>Oldest</option>
-                            </select>
-                            <button type="submit" class="btn btn-primary">Sort</button>
+                           
                         </form>
                     </div>
                 </div>

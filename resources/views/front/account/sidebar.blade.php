@@ -24,19 +24,23 @@
                <a href="{{ route('account.createJob') }}">Post a Job</a> 
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <a href="{{ route('account.myJobs') }}">My Jobs</a> 
+                <a href="{{ route('account.myJobs') }}">Posted Jobs</a> 
             </li>
+            @if (Auth::check() && Auth::user()->role == 'freelancer')
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                 <a href="{{ route('account.myJobApplications') }}">Jobs Applied</a> 
             </li>
+            @endif
+            @if (Auth::check() && Auth::user()->role == 'freelancer')
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                <a href="{{ route('account.savedJobs') }}">Saved Jobs</a> 
-            </li>      
-            {{-- <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <a href="{{ route('account.saveFreelancer') }}">Saved Freelancers</a> 
-             </li>       --}}
+            </li> 
+            @endif     
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <a href="{{ route('account.logout')}}">Logout</a> 
+                <a href="{{ route('account.saveFreelancer') }}">Saved Freelancers</a> 
+             </li>      
+            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                <a href="{{ route('account.chooseRole')}}">Logout</a> 
             </li>                                                  
         </ul>
     </div>
