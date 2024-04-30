@@ -1,4 +1,4 @@
-<div class="card border-0 shadow mb-4 p-3">
+{{-- <div class="card border-0 shadow mb-4 p-3">
     <div class="s-body text-center mt-3">
         @if (Auth::user()->image != '')
         <img src="{{ asset('profilePic/'.Auth::user()->image) }}" alt="avatar"  class="rounded-circle img-fluid" style="width: 150px;">
@@ -13,7 +13,7 @@
             <button data-bs-toggle="modal" data-bs-target="#exampleModal" type="button" class="btn btn-primary">Change Profile Picture</button>
         </div>
     </div>
-</div>
+</div> --}}
 <div class="card account-nav border-0 shadow mb-4 mb-lg-0">
     <div class="card-body p-0">
         <ul class="list-group list-group-flush ">
@@ -36,11 +36,11 @@
                <a href="{{ route('account.savedJobs') }}">Saved Jobs</a> 
             </li> 
             @endif     
-            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+            {{-- <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                 <a href="{{ route('account.saveFreelancer') }}">Saved Freelancers</a> 
-             </li>      
+             </li>       --}}
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <a href="{{ route('account.chooseRole')}}">Logout</a> 
+                <a href="{{ route('account.logout')}}">Logout</a> 
             </li>                                                  
         </ul>
     </div>

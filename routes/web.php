@@ -34,7 +34,7 @@ App::setLocale('ne');
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/jobs', [JobsController::class, 'index'])->name('jobs');
 Route::get('/freelancers', [FreelancersController::class, 'index'])->name('freelancers');
-Route::post('/account/create-freelancer', [FreelancersController::class, 'create'])->name('account.createFreelancer');
+Route::post('/account/create-freelancer', [FreelancersController::class, 'createFreelancer'])->name('account.createFreelancer');
 Route::get('/freelancer/detail/{id}', [FreelancersController::class, 'detail'])->name('freelancer.show');
 Route::post('/freelancer/save', [FreelancersController::class, 'save'])->name('saveFreelancer');
 Route::get('/jobs/detail/{id}', [JobsController::class, 'detail'])->name('jobDetail');
@@ -111,5 +111,9 @@ Route::group(['prefix' => 'account'], function () {
         // Redirect back to the previous page or homepage
         return redirect()->back();
     })->name('changeLanguage');
+
     
 });
+Route::get('/testing', function(){
+    dd('here');
+    });

@@ -12,9 +12,10 @@ class HomeController extends Controller
     // This method will show our home page
     public function index(Request $request)
     {
+        
         // Get the selected locale from the request
         $locale = $request->get('locale');
-
+        
         // Check if the selected locale is supported
         if (array_key_exists($locale, config('app.supported_locales'))) {
             // Set the application locale
@@ -46,7 +47,7 @@ class HomeController extends Controller
             ->orderBy('created_at', 'DESC')
             ->take(6)
             ->get();
-
+         
         return view('front.home', [
             'categories' => $categories,
             'featuredJobs' => $featuredJobs,

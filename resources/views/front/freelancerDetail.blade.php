@@ -33,12 +33,14 @@
                                     @endif
                                 </div>
                                 <div class="freelancer_content">
-                                    <!-- Display name with custom font and adjusted font size -->
+                                 
                                     <h4 style="font-family: 'Arial', sans-serif; font-size: 24px; margin-top: 20px;">{{ $freelancer->name }}</h4>
                                     <!-- Display mobile number with adjusted font size -->
                                     <p style="font-family: 'Arial', sans-serif; font-size: 18px;">Mobile: {{ $freelancer->mobile }}</p>
                                     <!-- Display designation with adjusted font size -->
                                     <p style="font-family: 'Arial', sans-serif; font-size: 18px;">Designation: {{ $freelancer->designation }}</p>
+                                    <!-- Display address with adjusted font size -->
+                                    <p style="font-family: 'Arial', sans-serif; font-size: 18px;">Address: {{ $freelancer->description }}</p>
                                     <!-- Display address with adjusted font size -->
                                     <p style="font-family: 'Arial', sans-serif; font-size: 18px;">Address: {{ $freelancer->address }}</p>
                                     <!-- Display location with adjusted font size -->

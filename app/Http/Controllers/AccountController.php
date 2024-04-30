@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Category;
 use App\Models\JobType;
 use App\Models\Job;
+use App\Models\Freelancer;
 use App\Models\SavedJob;
 use App\Models\JobApplication;
 use Illuminate\Support\Facades\Storage;
@@ -110,48 +111,43 @@ class AccountController extends Controller
 
     public function profile()
     {
-
-
         $id = Auth::user()->id;
         $user = User::where('id', $id)->first();
         return view('front.account.profile', [
             'user' => $user
         ]);
     }
-
+    
     public function updateProfile(Request $request)
     {
-
         $id = Auth::user()->id;
-
+    
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:5|max:20',
             'email' => 'required|email',
             'mobile' => 'required|digits:10',
         ]);
+    
         if ($validator->passes()) {
-
             $user = User::find($id);
             $user->name = $request->name;
             $user->email = $request->email;
             $user->mobile = $request->mobile;
             $user->address = $request->address;
+            $user->description = $request->description;
             $user->designation = $request->designation;
             $user->save();
-
+    
             session()->flash('success', 'Profile updated successfully.');
-
+    
             return redirect('/account/profile');
         } else {
             return response()->json([
                 'status' => false,
                 'errors' => $validator->errors()
-
             ]);
         }
     }
-
-
 
     public function logout()
     {
@@ -439,21 +435,39 @@ class AccountController extends Controller
             'status' => true
         ]);
     }
-    public function saveFreelancer(Request $request)
-    {
-        // Validate the incoming request
-        $request->validate([
-            'freelancer_id' => 'required|exists:freelancers,id',
-            // Add more validation rules as needed
-        ]);
+    public function createFreelancer()
+{
+    return view('front.account.freelancer.create');
+}
 
-        // Retrieve the freelancer ID from the request
-        $freelancerId = $request->input('freelancer_id');
+public function saveFreelancer(Request $request)
+{
+    // Validate the request data
+    $request->validate([
+        'name' => 'required',
+        'email' => 'required|email',
+        'designation' => 'nullable',
+        'address' => 'nullable',
+        'mobile' => 'nullable',
+        'short_description' => 'nullable',
+        'description' => 'nullable',
+    ]);
 
-        // Perform any necessary logic to save the freelancer
-        // For example, you can save the freelancer ID to the user's profile, etc.
+    // Create a new freelancer instance
+    $freelancer = new Freelancer();
+    $freelancer->name = $request->name;
+    $freelancer->email = $request->email;
+    $freelancer->designation = $request->designation;
+    $freelancer->address = $request->address;
+    $freelancer->mobile = $request->mobile;
+    $freelancer->short_description = $request->short_description;
+    $freelancer->description = $request->description;
 
-        // Redirect back with a success message
-        return redirect()->back()->with('success', 'Freelancer saved successfully');
-    }
+    // Save the freelancer
+    $freelancer->save();
+
+    // Redirect with success message
+    return redirect()->route('account.profile')->with('success', 'Freelancer profile created successfully.');
+}
+    
 }
