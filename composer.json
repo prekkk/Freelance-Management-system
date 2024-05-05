@@ -7,18 +7,16 @@
     "require": {
         "php": "^8.1",
         "guzzlehttp/guzzle": "^7.2",
-        "infobip/infobip-api-php-client": "^4.0",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "laravel/ui": "*",
-        "munafio/chatify": "*"
+        "munafio/chatify": "^1.6"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.10",
         "fakerphp/faker": "^1.9.1",
         "laravel-lang/common": "*",
-        "laravel-lang/lang": "^15.2",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
