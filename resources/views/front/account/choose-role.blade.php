@@ -26,9 +26,9 @@
                             </div>
                         </div>
                     </form>
-                    <div class="mt-3 text-center">
+                    {{-- <div class="mt-3 text-center">
                         <p>Already have an account? <a href="{{ route('account.login') }}">Log In</a></p>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

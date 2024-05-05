@@ -1,4 +1,4 @@
-{{-- <div class="card border-0 shadow mb-4 p-3">
+<div class="card border-0 shadow mb-4 p-3">
     <div class="s-body text-center mt-3">
         @if (Auth::user()->image != '')
         <img src="{{ asset('profilePic/'.Auth::user()->image) }}" alt="avatar"  class="rounded-circle img-fluid" style="width: 150px;">
@@ -13,19 +13,33 @@
             <button data-bs-toggle="modal" data-bs-target="#exampleModal" type="button" class="btn btn-primary">Change Profile Picture</button>
         </div>
     </div>
-</div> --}}
+</div>
 <div class="card account-nav border-0 shadow mb-4 mb-lg-0">
     <div class="card-body p-0">
         <ul class="list-group list-group-flush ">
             <li class="list-group-item d-flex justify-content-between p-3">
                 <a href="{{ route('account.profile') }}">Account Settings</a> 
             </li>
+            @if (Auth::check() && Auth::user()->role == 'employer')
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                <a href="{{ route('account.createJob') }}">Post a Job</a> 
             </li>
+            @endif
+            @if (Auth::check() && Auth::user()->role == 'employer')
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                 <a href="{{ route('account.myJobs') }}">Posted Jobs</a> 
             </li>
+            @endif
+            @if (Auth::check() && Auth::user()->role == 'freelancer')
+            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+               <a href="{{ route('account.createFreelancer') }}">Post skill</a> 
+            </li>
+            @endif
+            {{-- @if (Auth::check() && Auth::user()->role == 'freelancer')
+            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+               <a href="{{ route('account.createJob') }}">Posted skills</a> 
+            </li>
+            @endif --}}
             @if (Auth::check() && Auth::user()->role == 'freelancer')
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                 <a href="{{ route('account.myJobApplications') }}">Jobs Applied</a> 
@@ -33,8 +47,13 @@
             @endif
             @if (Auth::check() && Auth::user()->role == 'freelancer')
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-               <a href="{{ route('account.savedJobs') }}">Saved Jobs</a> 
-            </li> 
+                <a href="{{ route('account.savedJobs') }}">Saved Jobs</a>
+            </li>  
+            @endif 
+            @if (Auth::check() && Auth::user()->role == 'employer')
+            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                <a href="">Hired Freelancers</a>
+            </li>  
             @endif     
             {{-- <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                 <a href="{{ route('account.saveFreelancer') }}">Saved Freelancers</a> 

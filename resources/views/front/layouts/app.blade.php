@@ -43,7 +43,7 @@
                     </ul>
 
                     @if (!Auth::check())
-                        <a class="btn btn-outline-primary me-2" href="{{ route('account.chooseRole') }}"
+                        <a class="btn btn-outline-primary me-2" href="{{ route('account.login') }}"
                             type="submit">Login</a>
                     @else
                         @if (Auth::user()->role == 'admin')
@@ -55,10 +55,9 @@
                     @endif
 
                     @if (Auth::check() && Auth::user()->role == 'employer')
-					<a class="btn btn-primary" href="{{ route('account.createJob') }}" type="submit">Post a Job</a>
-                        </div>
+                        <a class="btn btn-primary" href="{{ route('account.createJob') }}" type="submit">Post a
+                            Job</a>
                     @endif
-
 
                 </div>
             </div>
@@ -93,10 +92,22 @@
         </div>
     </div>
 
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <footer class="bg-dark py-3 bg-2">
         <!-- Language Switcher -->
         <div>
-            <a href="{{ route('changeLanguage', 'en') }}">English</a> |
+            <a href="{{ route('changeLanguage', 'en_AU') }}">English</a> |
             <a href="{{ route('changeLanguage', 'ne') }}">नेपाली</a>
         </div>
 
@@ -110,7 +121,11 @@
     <script src="{{ asset('assets/js/lazyload.17.6.0.min.js') }}"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Include Bootstrap JavaScript library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Include jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         $.ajaxSetup({
             headers: {

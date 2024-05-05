@@ -1,3 +1,4 @@
+<!-- resources/views/front/account/freelancer/edit-freelancer.blade.php -->
 @extends('front.layouts.app')
 
 @section('main')
@@ -8,7 +9,7 @@
                 <nav aria-label="breadcrumb" class="rounded-3 p-3 mb-4">
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item"><a href="{{ route("home") }}">Home</a></li>
-                        <li class="breadcrumb-item active">Post Skill</li>
+                        <li class="breadcrumb-item active">Edit Freelancer</li>
                     </ol>
                 </nav>
             </div>
@@ -20,30 +21,30 @@
             <div class="col-lg-9">
                 @include('front.message')
 
-                <form action="{{ route('account.saveFreelancer') }}" method="post" id="createFreelancerForm">
+                <form action="{{ route('account.updateFreelancer', $freelancer->id) }}" method="post" id="editFreelancerForm" enctype="multipart/form-data">
                     @csrf
                     <div class="card border-0 shadow mb-4 ">
                         <div class="card-body card-form p-4">
-                            <h3 class="fs-4 mb-1">Skill Details</h3>
+                            <h3 class="fs-4 mb-1">Edit Freelancer Details</h3>
                             <div class="mb-4">
                                 <label for="name" class="mb-2">Name<span class="req">*</span></label>
-                                <input type="text" id="name" name="name" class="form-control" placeholder="Name">
+                                <input type="text" id="name" name="name" class="form-control" placeholder="Name" value="{{ $freelancer->name }}">
                             </div>
                             <div class="mb-4">
                                 <label for="designation" class="mb-2">Designation<span class="req">*</span></label>
-                                <input type="text" id="designation" name="designation" class="form-control" placeholder="Designation">
+                                <input type="text" id="designation" name="designation" class="form-control" placeholder="Designation" value="{{ $freelancer->designation }}">
                             </div>
                             <div class="mb-4">
                                 <label for="email" class="mb-2">Email<span class="req">*</span></label>
-                                <input type="email" id="email" name="email" class="form-control" placeholder="Email">
+                                <input type="email" id="email" name="email" class="form-control" placeholder="Email" value="{{ $freelancer->email }}">
                             </div>
                             <div class="mb-4">
                                 <label for="location" class="mb-2">Location<span class="req">*</span></label>
-                                <input type="text" id="location" name="location" class="form-control" placeholder="Location">
+                                <input type="text" id="location" name="location" class="form-control" placeholder="Location" value="{{ $freelancer->location }}">
                             </div>
                             <div class="mb-4">
-                                <label for="description" class="mb-2">Short Description<span class="req">*</span></label>
-                                <textarea class="form-control" id="description" name="description" rows="5" placeholder="Short Description"></textarea>
+                                <label for="short_description" class="mb-2">Short Description<span class="req">*</span></label>
+                                <textarea class="form-control" id="short_description" name="short_description" rows="5" placeholder="Short Description">{{ $freelancer->short_description }}</textarea>
                             </div>
                             <div class="mb-4">
                                 <label for="profile_picture" class="mb-2">Profile Picture</label>
@@ -51,7 +52,7 @@
                             </div>
                         </div>
                         <div class="card-footer p-4">
-                            <button type="submit" class="btn btn-primary">Save Freelancer</button>
+                            <button type="submit" class="btn btn-primary">Update Freelancer</button>
                         </div>               
                     </div>
                 </form>
@@ -63,13 +64,17 @@
 
 @section('customJs')
 <script type="text/javascript">
-$("#createFreelancerForm").submit(function(e){
+$("#editFreelancerForm").submit(function(e){
     e.preventDefault();
 
     var formData = new FormData(this); // Create FormData object from the form
 
+    // Manually append file inputs to FormData
+    var profilePictureFile = $('#profile_picture')[0].files[0];
+    formData.append('profile_picture', profilePictureFile);
+
     $.ajax({
-        url: '{{ route("account.saveFreelancer") }}',
+        url: '{{ route("account.updateFreelancer", $freelancer->id) }}',
         type: 'POST',
         dataType: 'json',
         processData: false, 
@@ -83,7 +88,7 @@ $("#createFreelancerForm").submit(function(e){
                     .removeClass('invalid-feedback')
                     .html('');
 
-                window.location.href="{{ route('account.profile') }}";
+                window.location.href="{{ route('account.myFreelancers') }}";
 
             } else {
                 var errors = response.errors;

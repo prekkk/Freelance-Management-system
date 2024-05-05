@@ -14,6 +14,12 @@ use App\Models\Freelancer;
 use App\Models\SavedJob;
 use App\Models\JobApplication;
 use Illuminate\Support\Facades\Storage;
+// use Infobip\Configuration;
+// use Infobip\Api\SmsApi; 
+// use Infobip\Model\SmsDestination;
+// use Infobip\Model\SmsTextualMessage;
+// use Infobip\Model\SmsAdvancedTextualRequest;
+// require_once __DIR__ . '/vendor/autoload.php';
 
 class AccountController extends Controller
 {
@@ -67,21 +73,21 @@ class AccountController extends Controller
             'email' => 'required|email',
             'password' => 'required'
         ]);
-    
+
         if ($validator->fails()) {
             return redirect()->route('account.login')
                 ->withErrors($validator)
                 ->withInput($request->only('email'));
         }
-    
+
         // Attempt to authenticate the user
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             // Check if a role was selected
             if ($request->has('selected_role') && in_array($request->input('selected_role'), ['employer', 'freelancer'])) {
                 // Store the selected role in the session
                 session(['selected_role' => $request->input('selected_role')]);
-            }            
-    
+            }
+
             // Redirect to the appropriate page based on the role
             $role = session('selected_role', ''); // Retrieve the selected role from the session
             if ($role === 'employer') {
@@ -98,7 +104,7 @@ class AccountController extends Controller
             // Authentication failed, redirect back to login page with error message
             return redirect()->route('account.login')->with('error', 'Invalid credentials.');
         }
-    }    
+    }
 
     public function chooseRole()
     {
@@ -117,30 +123,31 @@ class AccountController extends Controller
             'user' => $user
         ]);
     }
-    
+
     public function updateProfile(Request $request)
     {
         $id = Auth::user()->id;
-    
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:5|max:20',
             'email' => 'required|email',
             'mobile' => 'required|digits:10',
         ]);
-    
+
         if ($validator->passes()) {
             $user = User::find($id);
             $user->name = $request->name;
             $user->email = $request->email;
             $user->mobile = $request->mobile;
             $user->address = $request->address;
-            $user->description = $request->description;
-            $user->designation = $request->designation;
             $user->save();
-    
+
+            // Flash success message
             session()->flash('success', 'Profile updated successfully.');
-    
-            return redirect('/account/profile');
+
+            return response()->json([
+                'status' => true,
+            ]);
         } else {
             return response()->json([
                 'status' => false,
@@ -205,6 +212,7 @@ class AccountController extends Controller
             'vacancy' => 'required|integer',
             'location' => 'required|max:50',
             'description' => 'required',
+            'responsibilities' => 'nullable',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
 
@@ -285,6 +293,7 @@ class AccountController extends Controller
             'vacancy' => 'required|integer',
             'location' => 'required|max:50',
             'description' => 'required',
+            'responsibilities' => 'nullable',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -313,11 +322,12 @@ class AccountController extends Controller
 
             session()->flash('success', 'Job updated successfully.');
 
-            return redirect()->route('account.editJob');
+            return redirect()->route('account.myJobs');
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
         }
     }
+
 
     public function deleteJobs(Request $request)
     {
@@ -327,12 +337,12 @@ class AccountController extends Controller
         ])->first();
 
         if ($job == null) {
-            session()->flash('error', 'Either job deleted or not found.');
-            return redirect()->route('account.myJobs');
+            return redirect()->route('account.myJobs')->with('error', 'Either job deleted or not found.');
         }
-        Job::where('id', $request->jobId)->delete();
-        session()->flash('success', 'Job deleted succesfully.');
-        return redirect()->route('account.myJobs');
+
+        $job->delete();
+
+        return redirect()->route('account.myJobs')->with('success', 'Job deleted successfully.');
     }
     public function myJobApplications()
     {
@@ -435,39 +445,126 @@ class AccountController extends Controller
             'status' => true
         ]);
     }
+
     public function createFreelancer()
-{
-    return view('front.account.freelancer.create');
-}
+    {
+        return view('front.account.freelancers.create');
+    }
 
-public function saveFreelancer(Request $request)
-{
-    // Validate the request data
-    $request->validate([
-        'name' => 'required',
-        'email' => 'required|email',
-        'designation' => 'nullable',
-        'address' => 'nullable',
-        'mobile' => 'nullable',
-        'short_description' => 'nullable',
-        'description' => 'nullable',
-    ]);
+    public function saveFreelancer(Request $request)
+    {
+        $rules = [
+            'name' => 'required',
+            'email' => 'required|email',
+            'designation' => 'nullable',
+            'location' => 'nullable',
+            'mobile' => 'nullable',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'description' => 'nullable',
+        ];
 
-    // Create a new freelancer instance
-    $freelancer = new Freelancer();
-    $freelancer->name = $request->name;
-    $freelancer->email = $request->email;
-    $freelancer->designation = $request->designation;
-    $freelancer->address = $request->address;
-    $freelancer->mobile = $request->mobile;
-    $freelancer->short_description = $request->short_description;
-    $freelancer->description = $request->description;
+        $validator = Validator::make($request->all(), $rules);
 
-    // Save the freelancer
-    $freelancer->save();
+        if ($validator->passes()) {
+            // Handle image upload if needed
+            $imagePath = null;
+            if ($request->hasFile('profile_picture')) {
+                $path = $request->file('profile_picture')->store('public/freelancer_images');
+                $imagePath = Storage::url($path);
+            }
+            // Create freelancer instance and save to database
+            $freelancer = new Freelancer();
+            $freelancer->name = $request->name;
+            $freelancer->designation = $request->designation;
+            $freelancer->email = $request->email;
+            $freelancer->location = $request->location;
+            $freelancer->mobile = $request->mobile;
+            $freelancer->description = $request->description;
+            $freelancer->profile_picture = $imagePath;
+            $freelancer->save();
+            return response()->json([
+                'status' => true,
+                'message' => 'Skill Posted successfully.',
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+    }
 
-    // Redirect with success message
-    return redirect()->route('account.profile')->with('success', 'Freelancer profile created successfully.');
-}
-    
+    // public function myFreelancers()
+    // {
+    //     $freelancers = Freelancer::where('user_id', Auth::user()->id)->orderBy('created_at', 'DESC')->paginate(10);
+    //     return view('front.account.freelancer.my-freelancers', [
+    //         'freelancers' => $freelancers
+    //     ]);
+    // }
+
+    // public function editFreelancer(Request $request, $id)
+    // {
+    //     $freelancer = Freelancer::where('user_id', Auth::user()->id)->find($id);
+
+    //     if (!$freelancer) {
+    //         abort(404);
+    //     }
+
+    //     return view('front.account.freelancer.edit', [
+    //         'freelancer' => $freelancer,
+    //     ]);
+    // }
+    // public function updateFreelancer(Request $request, $id)
+    // {
+    //     $rules = [
+    //         'name' => 'required|min:2|max:100',
+    //         'designation' => 'nullable|max:255',
+    //         'email' => 'required|email|max:255',
+    //         'location' => 'nullable|max:50',
+    //         'mobile' => 'required|min:10|max:10',
+    //         'description' => 'nullable|max:100',
+
+    //     ];
+
+    //     $validator = Validator::make($request->all(), $rules);
+
+    //     if ($validator->passes()) {
+    //         $freelancer = Freelancer::where('user_id', Auth::user()->id)->find($id);
+
+    //         if (!$freelancer) {
+    //             return redirect()->back()->with('error', 'Freelancer not found.');
+    //         }
+
+    //         $freelancer->name = $request->name;
+    //         $freelancer->designation = $request->designation;
+    //         $freelancer->email = $request->email;
+    //         $freelancer->location = $request->location;
+    //         $freelancer->mobile = $request->mobile;
+    //         $freelancer->description = $request->description;
+    //         $freelancer->save();
+
+    //         session()->flash('success', 'Freelancer updated successfully.');
+
+    //         return redirect()->route('account.editFreelancer', $id);
+    //     } else {
+    //         return redirect()->back()->withErrors($validator)->withInput();
+    //     }
+    // }
+
+    // public function deleteFreelancer(Request $request)
+    // {
+    //     $freelancer = Freelancer::where([
+    //         'user_id' => Auth::user()->id,
+    //         'id' => $request->freelancerId
+    //     ])->first();
+
+    //     if (!$freelancer) {
+    //         session()->flash('error', 'Freelancer not found.');
+    //         return redirect()->route('account.myFreelancers');
+    //     }
+
+    //     $freelancer->delete();
+    //     session()->flash('success', 'Freelancer deleted successfully.');
+    //     return redirect()->route('account.myFreelancers');
+    // }
 }

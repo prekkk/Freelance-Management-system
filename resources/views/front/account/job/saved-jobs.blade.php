@@ -7,7 +7,7 @@
             <div class="col">
                 <nav aria-label="breadcrumb" class=" rounded-3 p-3 mb-4">
                     <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
                         <li class="breadcrumb-item active">Account Settings</li>
                     </ol>
                 </nav>
@@ -68,7 +68,7 @@
                                         @endforeach
                                     @else
                                     <tr>
-                                        <td colspan="5">Job Applications not found</td>
+                                        <td colspan="5">You have not saved any Jobs.</td>
                                     </tr>
                                     @endif
                                     

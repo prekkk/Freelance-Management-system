@@ -34,7 +34,8 @@ class UserController extends Controller
         
         $validator = Validator::make($request->all(),[
             'name' => 'required|min:5|max:20',
-            'email' => 'required|email|unique:users,email,'.$id.',id'
+            'email' => 'required|email|unique:users,email,'.$id.',id',
+            'mobile' => 'required|digits:10|unique:users,mobile,'.$id.',id' 
         ]);
 
 
@@ -52,29 +53,34 @@ class UserController extends Controller
             return redirect('admin/usersedit/'  . $user->id);
 
         } else {
-            return response()->json([
-                'status' => false,
-                'errors' => $validator->errors()
-            ]);
+            // If mobile number validation fails, redirect back with an error message
+            if ($validator->errors()->has('mobile')) {
+                session()->flash('error', 'Invalid input for mobile number.');
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+    
+            // If other validations fail, set a generic error message
+            session()->flash('error', 'Invalid inputs.');    
         }
     }
 
-    public function destroy(Request $request){
-        $id = $request->id;
+    public function destroy(Request $request)
+{
+    $id = $request->id;
 
-        $user = User::find($id);
+    $user = User::find($id);
 
-        if ($user == null) {
-            session()->flash('error','User not found');
-            return response()->json([
-                'status' => false,
-            ]);
-        }
-
-        $user->delete();
-        session()->flash('success','User deleted successfully');
-        return response()->json([
-            'status' => true,
-        ]);
+    if ($user == null) {
+        session()->flash('error', 'User not found');
+        return response()->json(['status' => false]);
     }
+
+    $user->delete();
+    if ($request->ajax()) {
+        return response()->json(['status' => true]);
+    } else {
+        session()->flash('success', 'User deleted successfully');
+        return redirect()->back();
+    }
+}
 }

@@ -12,6 +12,7 @@ use App\Models\JobType;
 class JobController extends Controller
 {
     public function index() {
+        dd('here');
         $jobs = Job::orderBy('created_at','DESC')->with('user','applications')->paginate(10);
         return view('admin.jobs.list',[
             'jobs' => $jobs

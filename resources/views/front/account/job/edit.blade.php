@@ -87,10 +87,10 @@
 
                             <div class="row mb-3">
                                 <div class="col-md-12">
-                                    <label for="responsibility" class="mb-2">Responsibility</label>
-                                    <textarea class="form-control textarea" name="responsibility" id="responsibility" cols="5" rows="5" placeholder="Responsibility">{{ $job->responsibility }}</textarea>
+                                    <label for="responsibilities" class="mb-2">Responsibility</label>
+                                    <textarea class="form-control textarea" name="responsibilities" id="responsibilities" cols="5" rows="5" placeholder="Responsibility">{{ $job->responsibilities }}</textarea>
                                 </div>
-                            </div>
+                            </div>                            
 
                             <div class="row mb-3">
                                 <div class="col-md-12">
@@ -122,15 +122,15 @@
 <script type="text/javascript">
     $("#editJobForm").submit(function(e){
         e.preventDefault();
-        $("button[type='submit']").prop('disbaled',true);
+        $("button[type='submit']").prop('disabled',true);
 
         $.ajax({
             url: '{{ route("account.updateJob", $job->id) }}',
             type: 'post',
-            dataType: 'json'
+            dataType: 'json',
             data: $("#editJobForm").serializeArray(),
             success: function(response){
-                $("button[type='submit']").prop('disbaled',false);
+                $("button[type='submit']").prop('disabled',false);
                 if(response.status == true){
                     $("#title").addClass('is-invalid')
                     .siblings('p')

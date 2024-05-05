@@ -36,9 +36,9 @@ class HomeController extends Controller
             ->get();
 
         $featuredJobs = Job::where('status', 1)
-            ->orderBy('created_at', 'DESC')
+            ->orderBy('vacancy', 'DESC')
             ->with('jobType')
-            ->where('isFeatured', 1)
+            // ->where('isFeatured', 1)
             ->take(6)
             ->get();
 
@@ -47,12 +47,39 @@ class HomeController extends Controller
             ->orderBy('created_at', 'DESC')
             ->take(6)
             ->get();
+
+
+            $categoryImages = [
+                asset('assets/images/categories/Care_Taking.png'),
+                asset('assets/images/categories/cleaning.png'),
+                asset('assets/images/categories/Events_Management.png'),
+                asset('assets/images/categories/Home_Repairs_and_Maintenance.png'),
+                asset('assets/images/categories/Maid_Jobs.png'),
+                asset('assets/images/categories/personal.png'),
+                asset('assets/images/categories/Remote_Jobs.png'),
+                asset('assets/images/categories/tutoring.png'),
+                
+            ];
          
+            // Define carousel images
+        $carouselImages = [
+            asset('assets/images/images1.png'),
+            asset('assets/images/images2.png'),
+            asset('assets/images/images3.png'),
+            asset('assets/images/images4.png'),
+            asset('assets/images/images5.png'),
+            asset('assets/images/images6.png'),
+            asset('assets/images/images7.png'),
+            asset('assets/images/images8.png'),
+            // Add more image URLs if needed
+        ];
         return view('front.home', [
             'categories' => $categories,
             'featuredJobs' => $featuredJobs,
             'latestJobs' => $latestJobs,
-            'newCategories' => $newCategories
+            'newCategories' => $newCategories,
+            'carouselImages' => $carouselImages,
+            'categoryImages' => $categoryImages,
         ]);
     }
 }

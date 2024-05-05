@@ -218,7 +218,6 @@ $("#createJobForm").submit(function(e){
                 }
 
             }
-
         }
     });
 });

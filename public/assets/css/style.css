@@ -10065,3 +10065,52 @@ footer .nav-link {
         opacity: 0.8;
     }
 
+    .card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+  }
+
+  .card-img-top {
+      width: 100px; 
+      height: auto; 
+  }
+
+  .carousel-images {
+    overflow: hidden;
+}
+
+.carousel-image-container {
+    flex: 0 0 auto;
+    margin-right: 10px; 
+}
+
+.carousel-image {
+    width: 200px; 
+    height: 200px; 
+}
+.carousel-control-prev,
+    .carousel-control-next {
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    @media (max-width: 768px) {
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 5%;
+        }
+    }
+
+    /* footer {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%; */
+      /* background-color: #343a40; 
+      color: white; 
+      padding: 20px 0;  */
+  /* } */
+  
+

@@ -16,7 +16,11 @@
         <div class="row">
             <div class="col-lg-3">
                 @include('front.account.sidebar')
+                <div class="mt-3">
+                    <a href="{{ route('account.chooseRole') }}" class="btn btn-primary btn-sm">Choose Role</a>
+                </div>
             </div>
+            
             <div class="col-lg-9">
                 @include('front.message')
                 <div class="card border-0 shadow mb-4">
@@ -35,18 +39,17 @@
                                 <input type="text" name="email" id="email"  placeholder="Enter Email" class="form-control" value="{{ $user->email }}">
                                 <p></p>
                             </div>
-                            @if (Auth::check() && Auth::user()->role == 'freelancer')
-                            <div class="mb-4">
+                            {{-- <div class="mb-4">
                                 <label for="" class="mb-2">Designation</label>
                                 <input type="text" name="designation" id="designation"  placeholder="Designation" class="form-control" value="{{ $user->designation }}">
-                            </div>
-                            @endif
+                            </div> --}}
+
                             <div class="mb-4">
                                 <label for="" class="mb-2">Address</label>
                                 <input type="text" name="address" id="address" placeholder="Address" class="form-control" value="{{ $user->address }}">
                             </div> 
                             <div class="mb-4">
-                                <label for="" class="mb-2">Mobile</label>
+                                <label for="" class="mb-2">Mobile*</label>
                                 <input type="text" name="mobile" id="mobile" placeholder="Mobile" class="form-control" value="{{ $user->mobile }}">
                             </div>                        
                         </div>

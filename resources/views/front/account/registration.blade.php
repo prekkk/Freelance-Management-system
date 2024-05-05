@@ -21,6 +21,11 @@
                             <p></p>
                         </div> 
                         <div class="mb-3">
+                            <label for="phone_number" class="mb-2">Phone Number*</label>
+                            <input type="text" name="phone_number" id="phone_number" class="form-control" placeholder="Enter Phone Number">
+                            <p></p>
+                        </div>
+                        <div class="mb-3">
                             <label for="password" class="mb-2">Password*</label>
                             <input type="password" name="password" id="password" class="form-control" placeholder="Enter Password">
                             <p></p>

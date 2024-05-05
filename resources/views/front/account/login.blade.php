@@ -21,7 +21,7 @@
                     <h1 class="h3 mb-4 text-center">Login</h1>
                     <form action="{{ route('account.authenticate') }}" method="post">
                         @csrf
-                        <input type="hidden" name="selected_role" value="{{ session('selected_role') }}">
+                        {{-- <input type="hidden" name="selected_role" value="{{ session('selected_role') }}"> --}}
                         <div class="mb-3">
                             <label for="email" class="form-label">Email*</label>
                             <input type="text" value="{{ old('email') }}" name="email" id="email" class="form-control @error('email') is-invalid @enderror" placeholder="example@example.com">

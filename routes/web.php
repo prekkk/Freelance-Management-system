@@ -34,14 +34,13 @@ App::setLocale('ne');
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/jobs', [JobsController::class, 'index'])->name('jobs');
 Route::get('/freelancers', [FreelancersController::class, 'index'])->name('freelancers');
-Route::post('/account/create-freelancer', [FreelancersController::class, 'createFreelancer'])->name('account.createFreelancer');
 Route::get('/freelancer/detail/{id}', [FreelancersController::class, 'detail'])->name('freelancer.show');
 Route::post('/freelancer/save', [FreelancersController::class, 'save'])->name('saveFreelancer');
 Route::get('/jobs/detail/{id}', [JobsController::class, 'detail'])->name('jobDetail');
 Route::get('/feedback/create/{freelancer_id}', [FeedbackController::class, 'create'])->name('feedback.create');
 Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.store');
 Route::post('/apply-job', [JobsController::class, 'applyJob'])->name('applyJob');
-Route::post('account/save-job', [JobsController::class, 'saveJob'])->name('saveJob');
+Route::post('/save-job', [JobsController::class, 'saveJob'])->name('saveJob');
 // Route for Khalti payment verification
 Route::post('/ajax/khalti/verify_job', [KhaltiPaymentController::class, 'verifyJob'])->name('ajax.khalti.verify_job');
 
@@ -72,12 +71,13 @@ Route::group(['prefix' => 'account'], function () {
         Route::post('/process-register', [AccountController::class, 'processRegistration'])->name('account.processRegistration');
         Route::get('/login', [AccountController::class, 'login'])->name('account.login');
         Route::post('/authenticate', [AccountController::class, 'authenticate'])->name('account.authenticate');
-        Route::get('/choose-role', [AccountController::class, 'chooseRole'])->name('account.chooseRole');
+       
     });
     // Authenticated Routes
 
     Route::group(['middleware' => 'auth'], function () {
         Route::get('/profile', [AccountController::class, 'profile'])->name('account.profile');
+        Route::get('/choose-role', [AccountController::class, 'chooseRole'])->name('account.chooseRole');
         Route::get('/logout', [AccountController::class, 'logout'])->name('account.logout');
         Route::put('/update-profile', [AccountController::class, 'updateProfile'])->name('account.updateProfile');
         Route::post('/update-profile-pic', [AccountController::class, 'updateProfilePic'])->name('account.updateProfilePic');
@@ -94,11 +94,17 @@ Route::group(['prefix' => 'account'], function () {
         Route::get('/saved-jobs', [AccountController::class, 'savedJobs'])->name('account.savedJobs');
         Route::post('/remove-saved-job', [AccountController::class, 'removeSavedJob'])->name('account.removeSavedJob');
         Route::put('/update-password', [AccountController::class, 'updatePassword'])->name('account.updatePassword');
+
+        Route::get('/create-freelancer', [AccountController::class, 'createFreelancer'])->name('account.createFreelancer');
         Route::post('/save-freelancer', [AccountController::class, 'saveFreelancer'])->name('account.saveFreelancer');
+        // Route::get('/my-freelancers', [AccountController::class, 'myFreelancers'])->name('account.myFreelancers');
+        Route::get('/edit-freelancer/{id}', [AccountController::class, 'editFreelancer'])->name('account.editFreelancer');
+        Route::post('/update-freelancer/{id}', [AccountController::class, 'updateFreelancer'])->name('account.updateFreelancer');
+        Route::post('/delete-freelancer', [AccountController::class, 'deleteFreelancer'])->name('account.deleteFreelancer');
     });
-   
+
     Route::get('/change-language/{locale}', function ($locale) {
-        if (! in_array($locale, ['en', 'ne'])) {
+        if (!in_array($locale, ['en_AU', 'ne'])) {
             abort(400);
         }
         // Check if the requested locale is supported
@@ -111,9 +117,5 @@ Route::group(['prefix' => 'account'], function () {
         // Redirect back to the previous page or homepage
         return redirect()->back();
     })->name('changeLanguage');
-
-    
 });
-Route::get('/testing', function(){
-    dd('here');
-    });
+
